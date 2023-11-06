@@ -1,0 +1,54 @@
+name: Build packages
+on: push
+jobs:
+  build:
+    env:
+      CCACHE_COMPILERCHECK: content
+      CCACHE_DIR: /tmp/ccache
+      PACKAGER_PRIVKEY: /tmp/cfsworks@gmail.com-6549341f.rsa
+      PRIVKEY_CONTENT: ${{ secrets.PRIVATEKEY }}
+      USE_CCACHE: '1'
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Restore ccache
+        id: ccache-restore
+        uses: actions/cache/restore@v3
+        with:
+          path: /tmp/ccache
+          key: ${{ runner.os }}-ccache
+
+      - name: Setup Alpine Linux edge (aarch64)
+        uses: jirutka/setup-alpine@v1
+        with:
+          arch: aarch64
+          branch: edge
+          packages: >
+            alpine-sdk
+          volumes: /tmp:/tmp
+
+      - name: Get packager key set up
+        run: |
+          echo "$PRIVKEY_CONTENT" > $PACKAGER_PRIVKEY
+          openssl rsa -pubout -in $PACKAGER_PRIVKEY > $PACKAGER_PRIVKEY.pub
+        shell: alpine.sh {0}
+
+      - name: Add runner to abuild group
+        run: |
+          adduser runner abuild
+        shell: alpine.sh --root {0}
+
+      - name: Run build for linux-lts
+        run: |
+          cd main/linux-lts
+          abuild -r
+        shell: alpine.sh {0}
+
+      - name: Save ccache
+        id: ccache-save
+        uses: actions/cache/save@v3
+        with:
+          path: /tmp/ccache
+          key: ${{ steps.ccache-restore.cache-primary-key }}
