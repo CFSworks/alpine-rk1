@@ -20,13 +20,14 @@ jobs:
           path: /tmp/ccache
           key: ${{ runner.os }}-ccache
 
-      - name: Setup Alpine Linux edge (aarch64)
+      - name: Setup Alpine Linux edge
         uses: jirutka/setup-alpine@v1
         with:
-          arch: aarch64
           branch: edge
           packages: >
             alpine-sdk
+            ccache
+            gcc-aarch64-none-elf
           volumes: /tmp:/tmp
 
       - name: Get packager key set up
@@ -35,15 +36,17 @@ jobs:
           openssl rsa -pubout -in $PACKAGER_PRIVKEY > $PACKAGER_PRIVKEY.pub
         shell: alpine.sh {0}
 
-      - name: Add runner to abuild group
+      - name: Add runner to abuild group, and set up build environment
         run: |
           adduser runner abuild
+          ln -s $(which ccache) /usr/lib/ccache/bin/aarch64-none-elf-gcc
+          cp -ra /usr/lib/gcc/*alpine*/*/plugin/include/cp/* /usr/lib/gcc/aarch64-none-elf/*/plugin/include/cp/
         shell: alpine.sh --root {0}
 
       - name: Run build for linux-lts
         run: |
           cd main/linux-lts
-          abuild -r
+          CHOST=aarch64-none-elf CBUILDROOT=/ CARCH=aarch64 BOOTSTRAP=no abuild -r
         shell: alpine.sh {0}
 
       - name: Save ccache
