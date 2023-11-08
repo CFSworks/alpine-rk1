@@ -13,12 +13,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Restore ccache
-        id: ccache-restore
-        uses: actions/cache/restore@v3
+      - name: Preserve ccache
+        uses: actions/cache@v3
         with:
           path: /tmp/ccache
-          key: ${{ runner.os }}-ccache
+          key: ccache-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: ccache-${{ runner.os }}
 
       - name: Setup Alpine Linux edge
         uses: jirutka/setup-alpine@v1
@@ -48,10 +48,3 @@ jobs:
           cd main/linux-lts
           CHOST=aarch64-none-elf CBUILDROOT=/ CARCH=aarch64 BOOTSTRAP=no abuild -r
         shell: alpine.sh {0}
-
-      - name: Save ccache
-        id: ccache-save
-        uses: actions/cache/save@v3
-        with:
-          path: /tmp/ccache
-          key: ${{ steps.ccache-restore.cache-primary-key }}
