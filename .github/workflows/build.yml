@@ -3,7 +3,7 @@ on: push
 permissions:
   contents: write
 jobs:
-  build:
+  packages:
     env:
       CCACHE_COMPILERCHECK: content
       CCACHE_DIR: /tmp/ccache
