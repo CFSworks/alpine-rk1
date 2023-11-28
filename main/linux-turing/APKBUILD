@@ -1,33 +1,30 @@
-# Maintainer: Natanael Copa <ncopa@alpinelinux.org>
+# Maintainer: Sam Edwards <CFSworks@gmail.com>
 
-_flavor=lts
+_flavor=turing
 pkgname=linux-$_flavor
-pkgver=6.1.62
+pkgver=6.6.2
 case $pkgver in
 	*.*.*)	_kernver=${pkgver%.*};;
 	*.*) _kernver=$pkgver;;
 esac
-pkgrel=1
-pkgdesc="Linux lts kernel"
+pkgrel=0
+pkgdesc="Linux kernel with Turing patches"
 url="https://www.kernel.org"
 depends="initramfs-generator"
 _depends_dev="perl gmp-dev mpc1-dev mpfr-dev elfutils-dev bash flex bison zstd"
 makedepends="$_depends_dev sed installkernel bc linux-headers linux-firmware-any openssl-dev>3 mawk
 	diffutils findutils zstd pahole python3 gcc>=13.1.1_git20230624"
 options="!strip"
-_config=${config:-config-lts.${CARCH}}
+_config=${config:-config-turing.${CARCH}}
 source="https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/linux-$_kernver.tar.xz
 	0001-powerpc-config-defang-gcc-check-for-stack-protector-.patch
 	0001-x86-Compress-vmlinux-with-zstd-19-instead-of-22.patch
 	0001-kexec-add-kexec_load_disabled-boot-option.patch
 	awk.patch
 	ppc-notext.patch
-	0001-tty-Move-sysctl-setup-into-core-tty-logic.patch
-	0002-tty-Allow-TIOCSTI-to-be-disabled.patch
-	0003-tty-Move-TIOCSTI-toggle-variable-before-kerndoc.patch
 	0001-PCI-brcmstb-Configure-HW-CLKREQ-mode-appropriate-for-downstream-device.patch
 
-	lts.aarch64.config
+	turing.aarch64.config
 	"
 subpackages="$pkgname-dev:_dev:$CBUILD_ARCH $pkgname-doc"
 for _i in $source; do
@@ -229,9 +226,9 @@ _package() {
 package() {
 	depends="$depends linux-firmware-any"
 
-	_package lts "$pkgdir"
+	_package turing "$pkgdir"
 
-	# copy files for linux-lts-doc sub package
+	# copy files for linux-turing-doc sub package
 	mkdir -p "$pkgdir"/usr/share/doc
 	cp -r "$srcdir"/linux-"$_kernver"/Documentation \
 		"$pkgdir"/usr/share/doc/linux-doc-"$pkgver"/
@@ -324,16 +321,13 @@ _dev() {
 }
 
 sha512sums="
-6ed2a73c2699d0810e54753715635736fc370288ad5ce95c594f2379959b0e418665cd71bc512a0273fe226fe90074d8b10d14c209080a6466498417a4fdda68  linux-6.1.tar.xz
+458b2c34d46206f9b4ccbac54cc57aeca1eaecaf831bc441e59701bac6eadffc17f6ce24af6eadd0454964e843186539ac0d63295ad2cc32d112b60360c39a35  linux-6.6.tar.xz
 a6c826e8c3884550fbe1dee3771b201b3395b073369f7fbfb5dc4aa5501e848b0bbc3a5ad80d932a6a50cbe0cfd579c75662f0c43ef79a38c1c6848db395c4c8  0001-powerpc-config-defang-gcc-check-for-stack-protector-.patch
 55f732c01e10948b283eb1cc77ce3f1169428251075f8f5dd3100d8fda1f08b6b3850969b84b42a52468d4f7c7ec7b49d01f0dff3c20c30f2e9ac0c07071b9d3  0001-x86-Compress-vmlinux-with-zstd-19-instead-of-22.patch
-5464cf4b2e251972091cc9d5138291a94298737e98ec24829829203fc879593b440a7cd1ca08e6d01debaab2887976cb5d38fae2fbe5149cef1735d5d73bb086  0001-kexec-add-kexec_load_disabled-boot-option.patch
-3816cfc8dd14d1c5ced05bbf19b099472c9bbbd1abced32cbb4b6b5baecfaa28c345e4e522648837d98e5bc7c311810cae9160f4c91019bb857a3857076b8e0e  awk.patch
+e654ea724a85890f99b041f3e8ca9ee36550a4527165469e56c944074e59a4d63116b5b02bae0da58efd706e555499bc1e42870c01fc6923d886e7d83d340a6c  0001-kexec-add-kexec_load_disabled-boot-option.patch
+e19060206202626195e30b7cb6d999b92eac7f454b35788e6a8759cea2e89b2ffa892bd18b2206f43e3b14c744f74f8e5e89b02cebd1733d48b1ab899bb109ff  awk.patch
 c74488940244ba032e741c370767467cfab93b89077b5dfccfed39b658f381e0995527e6c61de53b1c112b04ba647bfccf00f2e05c0637d3c703680a508821cc  ppc-notext.patch
-f8582538a8482656138a0ae56b67a6d3cec09ff8d82a3f790ffa3fa7c37d0ae24a04f01f0ae1aec09838f86490907995c2568be7841a3821f0e64704f60153e5  0001-tty-Move-sysctl-setup-into-core-tty-logic.patch
-0bfd2c138e997f25f821cd518263ad515fc303bbde37bcdb7dd651d30316c77652fec6fedb195102b8476b92b1e7269c143dad5df6431db49c4318375ad2e802  0002-tty-Allow-TIOCSTI-to-be-disabled.patch
-8b245ec672a56dae7ce82f488880f6f3c0b65776177db663a29f26de752bf2cefe6b677e2cedbebd85e98d6f6e3d66b9f198a0d7a6042a20191b5ca8f4a749e7  0003-tty-Move-TIOCSTI-toggle-variable-before-kerndoc.patch
 5487c5f112d002a7f2abd6e8c09ff1ab043016de3ed85d4502cd092e92f9422d5381306decda6e7a577a39b324bd460f51d09959038f465cf630098cbab19b97  0001-PCI-brcmstb-Configure-HW-CLKREQ-mode-appropriate-for-downstream-device.patch
-c7812e03292ceae7c1613328a6792af2f91c8b0bcc3ecb4c94933a71b0b5faa2158a6819dcda54d3df1a9b63bf306a8211cbbccc3cde5a8067093f3b2a11e36f  lts.aarch64.config
-f69267de43b22c634fc3a245f0b233283866a1d32f2d042add2a3055b857a88dc47b6e35dc3b8b70b9876cd07f99ab2544a239f42b60b9e76519072bb9817b5b  patch-6.1.62.xz
+c3bb7c3707c2362d82f52072c90eb2ad47427f4c69b3a6703c2883f65ee23808d6c50d7e071d812237fd20b7c8a1488bf74410c5f5bb1e01ffba75dc7f041152  turing.aarch64.config
+b9abd0117714e57c00a62f9dbe2e8439440419ed232ec3b87c3ecbc3fa740e29f7abcba41a381d589c138438f8cf5c4614d705053584a292102eb6bc7050bb45  patch-6.6.2.xz
 "
