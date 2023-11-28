@@ -46,9 +46,9 @@ jobs:
           cp -ra /usr/lib/gcc/*alpine*/*/plugin/include/cp/* /usr/lib/gcc/aarch64-none-elf/*/plugin/include/cp/
         shell: alpine.sh --root {0}
 
-      - name: Run build for linux-lts
+      - name: Run build for linux-turing
         run: |
-          cd main/linux-lts
+          cd main/linux-turing
           CHOST=aarch64-none-elf CBUILDROOT=/ CARCH=aarch64 BOOTSTRAP=no abuild -r
         shell: alpine.sh {0}
 
