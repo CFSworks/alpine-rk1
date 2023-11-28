@@ -1,0 +1,36 @@
+From 11e4c1167568025f2395d6fc70d374ed4c9651a0 Mon Sep 17 00:00:00 2001
+From: Sam Edwards <CFSworks@gmail.com>
+Date: Thu, 23 Nov 2023 11:46:47 -0800
+Subject: [PATCH 5/9] dwc3: Disable USB3 ports if maximum-speed doesn't permit
+ USB3
+
+---
+ drivers/usb/dwc3/host.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+index 61f57fe5bb78..29f170927e70 100644
+--- a/drivers/usb/dwc3/host.c
++++ b/drivers/usb/dwc3/host.c
+@@ -61,7 +61,7 @@ static int dwc3_host_get_irq(struct dwc3 *dwc)
+ 
+ int dwc3_host_init(struct dwc3 *dwc)
+ {
+-	struct property_entry	props[4];
++	struct property_entry	props[5];
+ 	struct platform_device	*xhci;
+ 	int			ret, irq;
+ 	int			prop_idx = 0;
+@@ -95,6 +95,9 @@ int dwc3_host_init(struct dwc3 *dwc)
+ 	if (dwc->usb2_lpm_disable)
+ 		props[prop_idx++] = PROPERTY_ENTRY_BOOL("usb2-lpm-disable");
+ 
++	if (dwc->maximum_speed == USB_SPEED_FULL || dwc->maximum_speed == USB_SPEED_HIGH)
++		props[prop_idx++] = PROPERTY_ENTRY_BOOL("disable-usb3");
++
+ 	/**
+ 	 * WORKAROUND: dwc3 revisions <=3.00a have a limitation
+ 	 * where Port Disable command doesn't work.
+-- 
+2.41.0
+

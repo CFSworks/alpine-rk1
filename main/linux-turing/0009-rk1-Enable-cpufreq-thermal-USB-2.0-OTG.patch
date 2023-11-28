@@ -1,0 +1,177 @@
+From 7735319b9be3bca4f3dce8958603bc5fa03d798d Mon Sep 17 00:00:00 2001
+From: Sam Edwards <CFSworks@gmail.com>
+Date: Mon, 13 Nov 2023 23:00:00 -0700
+Subject: [PATCH 9/9] rk1: Enable cpufreq, thermal, USB 2.0 OTG
+
+---
+ .../boot/dts/rockchip/rk3588-turing-rk1.dtsi  | 112 ++++++++++++++++++
+ 1 file changed, 112 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-turing-rk1.dtsi b/arch/arm64/boot/dts/rockchip/rk3588-turing-rk1.dtsi
+index 129f14dbd42f..b517debf2b54 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588-turing-rk1.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3588-turing-rk1.dtsi
+@@ -65,6 +65,57 @@ vcc_1v1_nldo_s3: vcc-1v1-nldo-s3-regulator {
+ 		regulator-max-microvolt = <1100000>;
+ 		vin-supply = <&vcc5v0_sys>;
+ 	};
++
++	usb2phy0_grf: syscon@fd5d0000 {
++		compatible = "rockchip,rk3588-usb2phy-grf", "syscon",
++			     "simple-mfd";
++		reg = <0x0 0xfd5d0000 0x0 0x4000>;
++		#address-cells = <1>;
++		#size-cells = <1>;
++
++		u2phy0: usb2-phy@0 {
++			compatible = "rockchip,rk3588-usb2phy";
++			reg = <0x0 0x10>;
++			interrupts = <GIC_SPI 393 IRQ_TYPE_LEVEL_HIGH 0>;
++			resets = <&cru SRST_OTGPHY_U3_0>, <&cru SRST_P_USB2PHY_U3_0_GRF0>;
++			reset-names = "phy", "apb";
++			clocks = <&cru CLK_USB2PHY_HDPTXRXPHY_REF>;
++			clock-names = "phyclk";
++			clock-output-names = "usb480m_phy0";
++			#clock-cells = <0>;
++			status = "okay";
++
++			u2phy0_otg: otg-port {
++				#phy-cells = <0>;
++				status = "okay";
++			};
++		};
++	};
++
++	usb_host0_xhci: usb@fc000000 {
++		extcon = <&u2phy0>;
++		maximum-speed = "high-speed";
++		phys = <&u2phy0_otg>;
++		phy-names = "usb2-phy";
++
++		compatible = "rockchip,rk3588-dwc3", "snps,dwc3";
++		reg = <0x0 0xfc000000 0x0 0x400000>;
++		interrupts = <GIC_SPI 220 IRQ_TYPE_LEVEL_HIGH 0>;
++		clocks = <&cru REF_CLK_USB3OTG0>, <&cru SUSPEND_CLK_USB3OTG0>,
++			 <&cru ACLK_USB3OTG0>;
++		clock-names = "ref_clk", "suspend_clk", "bus_clk";
++		dr_mode = "otg";
++		phy_type = "utmi_wide";
++		power-domains = <&power RK3588_PD_USB>;
++		resets = <&cru SRST_A_USB3OTG0>;
++		snps,dis_enblslpm_quirk;
++		snps,dis-u1-entry-quirk;
++		snps,dis-u2-entry-quirk;
++		snps,dis-u2-freeclk-exists-quirk;
++		snps,dis-del-phy-power-chg-quirk;
++		snps,dis-tx-ipgap-linecheck-quirk;
++		status = "okay";
++	};
+ };
+ 
+ &combphy2_psu {
+@@ -73,34 +124,42 @@ &combphy2_psu {
+ 
+ &cpu_b0 {
+ 	cpu-supply = <&vdd_cpu_big0_s0>;
++	mem-supply = <&vdd_cpu_big0_s0>;
+ };
+ 
+ &cpu_b1 {
+ 	cpu-supply = <&vdd_cpu_big0_s0>;
++	mem-supply = <&vdd_cpu_big0_s0>;
+ };
+ 
+ &cpu_b2 {
+ 	cpu-supply = <&vdd_cpu_big1_s0>;
++	mem-supply = <&vdd_cpu_big1_s0>;
+ };
+ 
+ &cpu_b3 {
+ 	cpu-supply = <&vdd_cpu_big1_s0>;
++	mem-supply = <&vdd_cpu_big1_s0>;
+ };
+ 
+ &cpu_l0 {
+ 	cpu-supply = <&vdd_cpu_lit_s0>;
++	mem-supply = <&vdd_cpu_lit_mem_s0>;
+ };
+ 
+ &cpu_l1 {
+ 	cpu-supply = <&vdd_cpu_lit_s0>;
++	mem-supply = <&vdd_cpu_lit_mem_s0>;
+ };
+ 
+ &cpu_l2 {
+ 	cpu-supply = <&vdd_cpu_lit_s0>;
++	mem-supply = <&vdd_cpu_lit_mem_s0>;
+ };
+ 
+ &cpu_l3 {
+ 	cpu-supply = <&vdd_cpu_lit_s0>;
++	mem-supply = <&vdd_cpu_lit_mem_s0>;
+ };
+ 
+ &gmac1 {
+@@ -272,6 +331,59 @@ &sdhci {
+ 	status = "okay";
+ };
+ 
++&soc_thermal {
++	trips {
++		soc_active1: trip-active1 {
++			temperature = <37500>;
++			hysteresis = <1000>;
++			type = "active";
++		};
++		soc_active2: trip-active2 {
++			temperature = <42500>;
++			hysteresis = <2000>;
++			type = "active";
++		};
++		soc_active3: trip-active3 {
++			temperature = <47500>;
++			hysteresis = <2000>;
++			type = "active";
++		};
++		soc_active4: trip-active4 {
++			temperature = <55000>;
++			hysteresis = <2000>;
++			type = "active";
++		};
++		soc_active5: trip-active5 {
++			temperature = <65000>;
++			hysteresis = <2000>;
++			type = "active";
++		};
++	};
++
++	cooling-maps {
++		map1 {
++			trip = <&soc_active1>;
++			cooling-device = <&fan 1 1>;
++		};
++		map2 {
++			trip = <&soc_active2>;
++			cooling-device = <&fan 2 2>;
++		};
++		map3 {
++			trip = <&soc_active3>;
++			cooling-device = <&fan 3 3>;
++		};
++		map4 {
++			trip = <&soc_active4>;
++			cooling-device = <&fan 4 4>;
++		};
++		map5 {
++			trip = <&soc_active5>;
++			cooling-device = <&fan 5 5>;
++		};
++	};
++};
++
+ &spi2 {
+ 	status = "okay";
+ 	pinctrl-names = "default";
+-- 
+2.41.0
+
