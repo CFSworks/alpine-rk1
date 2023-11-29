@@ -1,0 +1,17 @@
+Author: Milan P. Stanić <mps@arvanta.net>
+Date: 2023-04-04 10:07:00.033003320 +0200
+
+musl libc doesn't have c_ospeed and c_ispeed types so disable
+build of kwboot with this patch
+
+--- a/tools/Makefile	2023-04-04 10:07:00.033003320 +0200
++++ b/tools/Makefile	2023-04-04 10:07:26.345003333 +0200
+@@ -213,8 +213,6 @@
+ 
+ hostprogs-$(CONFIG_NETCONSOLE) += ncb
+ 
+-hostprogs-$(CONFIG_ARCH_KIRKWOOD) += kwboot
+-hostprogs-$(CONFIG_ARCH_MVEBU) += kwboot
+ 
+ hostprogs-y += proftool
+ proftool-objs = proftool.o lib/abuf.o
