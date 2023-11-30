@@ -1,10 +1,10 @@
 # Contributor: He Yangxuan <yangxuan8282@gmail.com>
 # Contributor: Timo Teras <timo.teras@iki.fi>
 # Maintainer: Milan P. Stanić <mps@arvanta.net>
-pkgname=u-boot
+pkgname=u-boot-turing
 pkgver=2024.01_rc3
-pkgrel=1
-pkgdesc="u-boot bootloader common files"
+pkgrel=0
+pkgdesc="u-boot bootloader Turing RK1 support"
 url="https://www.denx.de/wiki/U-Boot/"
 arch="all !s390x !ppc64le"
 license="GPL-2.0-or-later OFL-1.1 BSD-2-Clause BSD-3-Clause eCos-2.0 IBM-pibs
@@ -51,45 +51,7 @@ fi
 #     - CVE-2021-27097
 #     - CVE-2021-27138
 
-case "$CARCH" in
-arm*) board_configs="
-	beagleboard:am335x_boneblack_vboot
-	linksprite:Linksprite_pcDuino3_Nano
-	cuboxi:mx6cuboxi
-	raspberrypi:rpi_0_w,rpi,rpi_2,rpi_3_32b
-	wandboard:wandboard
-	qemu:qemu_arm
-	odroid:odroid,odroid-xu3
-	sunxi:LicheePi_Zero,Bananapi,Lamobo_R1,Cubieboard,Cubieboard2,orangepi_pc
-	";;
-aarch64) board_configs="
-	thunderx:thunderx_88xx
-	raspberrypi:rpi_3,rpi_arm64
-	odroid:odroid-c2,odroid-n2
-	snapdragon:starqltechn
-	exynos:a3y17lte,a5y17lte,a7y17lte
-	libretech:libretech-cc
-	rockchip:rockpro64-rk3399,roc-pc-rk3399,roc-cc-rk3328,pinebook-pro-rk3399
-	turing:turing-rk1-rk3588
-	qemu:qemu_arm64
-	sunxi:pine64-lts,pinebook,orangepi_3,teres_i,a64-olinuxino,a64-olinuxino-emmc,nanopi_neo2,pine64_plus
-	";;
-riscv64) board_configs="
-	qemu:qemu-riscv64,qemu-riscv64_smode
-	unleashed:sifive_unleashed
-	unmatched:sifive_unmatched
-	starfive:starfive_visionfive2
-	";;
-esac
-
-for board_config in $board_configs; do
-	_allboards="$_allboards $pkgname-${board_config%%:*}"
-done
-
-subpackages="$_allboards $pkgname-tools"
-case "$CARCH" in
-	arm*|aarch64|riscv64) subpackages="$pkgname-all:_all $_allboards $pkgname-tools";;
-esac
+board_configs="turing:turing-rk1-rk3588"
 
 build() {
 	# Set UART parameters for RK1
@@ -128,45 +90,11 @@ build() {
 			make O="$BUILD_DIR" all
 		done
 	done
-	msg "Building u-boot-tools"
-	make tools-only_defconfig
-	make tools-all
 }
 
 package() {
-	case "$CARCH" in
-		mips64|x86*) return;;
-	esac
-	cd "$builddir"/build
-	mkdir -p "$pkgdir"/usr/share/$pkgname "$pkgdir"/usr/sbin
-	install "$srcdir"/README.txt "$pkgdir"/usr/share/$pkgname/README.txt
-	install "$srcdir"/update-u-boot "$pkgdir"/usr/sbin
-}
-
-tools() {
-	pkgdesc="u-boot bootloader utility tools"
-	provides="uboot-tools"
-	replaces="uboot-tools"
-	mkdir -p $pkgdir
-	mkdir $subpkgdir
-	cd "$builddir"
-	for tool in dumpimage env/fw_printenv \
-		fit_check_sign fit_info gdb/gdbcont gdb/gdbsend gen_eth_addr img2srec \
-		mkenvimage mkimage ncb proftool; do
-		install -D tools/$tool \
-		$subpkgdir/usr/bin/"$(basename $tool)"
-		done
-	install -Dm644 tools/env/fw_env.config \
-		"$subpkgdir/usr/share/doc/$pkgname/examples/fw_env.config"
-	cd "$subpkgdir"/usr/bin
-	ln -sf fw_printenv fw_setenv
-}
-
-_all() {
-	pkgdesc="u-boot for all boards (meta package)"
-	depends="$_allboards"
-
-	mkdir -p "$subpkgdir"/
+	subpkgdir=$pkgdir
+	turing
 }
 
 _split_boards() {
