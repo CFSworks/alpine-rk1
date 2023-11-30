@@ -52,6 +52,12 @@ jobs:
           CHOST=aarch64-none-elf CBUILDROOT=/ CARCH=aarch64 BOOTSTRAP=no abuild -r
         shell: alpine.sh {0}
 
+      - name: Run build for u-boot-turing
+        run: |
+          cd main/u-boot-turing
+          CHOST=aarch64-none-elf CBUILDROOT=/ CARCH=aarch64 BOOTSTRAP=no abuild -r
+        shell: alpine.sh {0}
+
       - name: Copy public key to packages directory
         run: cp $PACKAGER_PRIVKEY.pub $REPODEST/
 
