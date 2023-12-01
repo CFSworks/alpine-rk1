@@ -44,6 +44,7 @@ jobs:
           adduser runner abuild
           ln -s $(which ccache) /usr/lib/ccache/bin/aarch64-none-elf-gcc
           cp -ra /usr/lib/gcc/*alpine*/*/plugin/include/cp/* /usr/lib/gcc/aarch64-none-elf/*/plugin/include/cp/
+          cp $PACKAGER_PRIVKEY.pub /etc/apk/keys/
         shell: alpine.sh --root {0}
 
       - name: Run build for linux-turing
