@@ -100,6 +100,23 @@ services needed on boot:
 # for svc in killprocs mount-ro savecache; do ln -s /etc/init.d/$svc /tmp/rootfs/etc/runlevels/shutdown/; done
 ```
 
+And none of this will work in the first place if we don't have
+`/sbin/init`, which we currently lack because Busybox didn't get to install its symlinks
+(again, due to `--no-scripts`). Here's a workaround:
+```
+# cat > /tmp/rootfs/sbin/init <<EOF
+#!/bin/sh
+
+/bin/busybox mount -t proc proc proc
+/bin/busybox mount -o remount,rw /
+/bin/busybox rm /sbin/init
+/bin/busybox --install -s && /bin/bbsuid --install
+exec /sbin/init
+EOF
+
+# chmod +x /tmp/rootfs/sbin/init
+```
+
 Also, you're definitely going to want to enable serial port logins:
 ```
 # vi /tmp/rootfs/etc/inittab
@@ -217,10 +234,5 @@ EOF
 ```
 
 Congratulations on your new Alpine installation! Go watch the UART output to see it boot.
-There is *one last step* you will have to do to get things to work correctly:
-```
-# /bin/busybox --install -s && /bin/bbsuid --install
-```
-
 You may log in as root. By default, no password is set.
 You will want to edit `/etc/network/interfaces` to bring the network up.
