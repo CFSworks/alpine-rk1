@@ -67,25 +67,19 @@ This will run **on the BMC**, but target our new Alpine rootfs.
 
 ```
 # mkdir /tmp/apk
-# curl http://dl-cdn.alpinelinux.org/alpine/v3.18/main/armv7/apk-tools-static-2.14.0-r2.apk | gunzip | tar -xC /tmp/apk
+# curl https://dl-cdn.alpinelinux.org/alpine/v3.18/main/armv7/apk-tools-static-2.14.0-r2.apk | gunzip | tar -xC /tmp/apk
 ```
 
 Now we can ask it to download the entire Alpine base system for us. You should *probably* replace `latest-stable` with a specific version:
 ```
 # export REPO_URL=https://dl-cdn.alpinelinux.org/alpine/latest-stable
 # /tmp/apk/sbin/apk.static -U --allow-untrusted --initdb --no-scripts --arch aarch64 \
-    -X ${REPO_URL/https/http}/main -p /tmp/rootfs \
+    -X ${REPO_URL}/main -p /tmp/rootfs \
     add alpine-base
 # cat > /tmp/rootfs/etc/apk/repositories <<EOF
 ${REPO_URL}/main
 ${REPO_URL}/community
 EOF
-```
-
-As of this writing, the BMC doesn't have a `ca-certificates.crt` file, which frustrates attempts at using HTTPS.
-Let's work around this going forward:
-```
-# export SSL_CERT_FILE=/tmp/rootfs/etc/ssl/certs/ca-certificates.crt
 ```
 
 ### Enable boot services
