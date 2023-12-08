@@ -2,12 +2,12 @@
 
 _flavor=turing
 pkgname=linux-$_flavor
-pkgver=6.6.2
+pkgver=6.6.5
 case $pkgver in
 	*.*.*)	_kernver=${pkgver%.*};;
 	*.*) _kernver=$pkgver;;
 esac
-pkgrel=3
+pkgrel=0
 pkgdesc="Linux kernel with Turing patches"
 url="https://www.kernel.org"
 depends="initramfs-generator"
