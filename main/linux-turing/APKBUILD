@@ -7,7 +7,7 @@ case $pkgver in
 	*.*.*)	_kernver=${pkgver%.*};;
 	*.*) _kernver=$pkgver;;
 esac
-pkgrel=2
+pkgrel=3
 pkgdesc="Linux kernel with Turing patches"
 url="https://www.kernel.org"
 depends="initramfs-generator"
@@ -25,14 +25,15 @@ source="https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/linux-$_kernver
 	0001-PCI-brcmstb-Configure-HW-CLKREQ-mode-appropriate-for-downstream-device.patch
 
 	0001-arm64-dts-rockchip-Add-Turing-RK1-SoM-support.patch
-	0002-arm64-dts-rockchip-Fix-eMMC-Data-Strobe-PD.patch
-	0003-arm64-dts-rockchip-Add-PCIe-pinctrls-to-Turing-RK1.patch
-	0004-xhci-Add-disable-usb3-DT-property.patch
-	0005-dwc3-Disable-USB3-ports-if-maximum-speed-doesn-t-per.patch
-	0006-arm64-dts-rockchip-rk3588-add-cpu-frequency-scaling-.patch
-	0007-arm64-dts-rockchip-enable-RK3588-tsadc-by-default.patch
-	0008-cpufreq-rockchip-Introduce-driver-for-rk3588.patch
-	0009-rk1-Enable-cpufreq-thermal-USB-2.0-OTG.patch
+	0002-arm64-dts-rockchip-Fix-Turing-RK1-interrupt-pinctrls.patch
+	0003-arm64-dts-rockchip-Fix-eMMC-Data-Strobe-PD-on-rk3588.patch
+	0005-usb-dwc3-host-Disable-USB3-ports-if-maximum-speed-do.patch
+	0004-xhci-Introduce-disable-usb3-DT-property-quirk.patch
+	0006-arm64-dts-rockchip-Add-PCIe-pinctrls-to-Turing-RK1.patch
+	0007-arm64-dts-rockchip-rk3588-add-cpu-frequency-scaling-.patch
+	0008-arm64-dts-rockchip-enable-RK3588-tsadc-by-default.patch
+	0009-cpufreq-rockchip-Introduce-driver-for-rk3588.patch
+	0010-rk1-Enable-cpufreq-thermal-USB-2.0-OTG.patch
 
 	turing.aarch64.config
 	"
@@ -338,15 +339,16 @@ e654ea724a85890f99b041f3e8ca9ee36550a4527165469e56c944074e59a4d63116b5b02bae0da5
 e19060206202626195e30b7cb6d999b92eac7f454b35788e6a8759cea2e89b2ffa892bd18b2206f43e3b14c744f74f8e5e89b02cebd1733d48b1ab899bb109ff  awk.patch
 c74488940244ba032e741c370767467cfab93b89077b5dfccfed39b658f381e0995527e6c61de53b1c112b04ba647bfccf00f2e05c0637d3c703680a508821cc  ppc-notext.patch
 5487c5f112d002a7f2abd6e8c09ff1ab043016de3ed85d4502cd092e92f9422d5381306decda6e7a577a39b324bd460f51d09959038f465cf630098cbab19b97  0001-PCI-brcmstb-Configure-HW-CLKREQ-mode-appropriate-for-downstream-device.patch
-a0028f6610efc11a974e194ba467209e3349f03ea7db4a515eb578be470fa5210a1c6eaaeb6fd44920f5947de329490655cc9a47c2ac67af972aab4ac58cfda5  0001-arm64-dts-rockchip-Add-Turing-RK1-SoM-support.patch
-3e484723dc2b4300c5d4632a089b9f9ebf0106bfc7d08474b1e726082a6e7cbed901fa52a67750318976ed25c43e2dc4b825a5c711796ff00ba1b94e000f3268  0002-arm64-dts-rockchip-Fix-eMMC-Data-Strobe-PD.patch
-4e8a2d63ec6438216aaba9b6168289fe0729c904f058bfbf48e4d24eb405d394b42202099f6d9001ec4fc156a3ac546954c111f81913abeeec88a70daa0f44e6  0003-arm64-dts-rockchip-Add-PCIe-pinctrls-to-Turing-RK1.patch
-3588c076cfa55a0fe866fa5f521054d94d565a3d8c14a46673dee90c389b2870d46390287a11d01435ef6d6a778eb2cdd3572a3aab5f2f9e553f21f3da74c7ed  0004-xhci-Add-disable-usb3-DT-property.patch
-a0ede37f39f95733e305314cecd436ac4ac652d0ea9a6b8730758d34e7f998a354e4a6c500609838b79d15b6d9c85b915ecd00fb6ef6855f75e153f84147f1a4  0005-dwc3-Disable-USB3-ports-if-maximum-speed-doesn-t-per.patch
-4c24d587ad26a25a446420f5afbc2ae06975384604fc2126677d34224684068f8e21688394b240159bba8ead8567bfcdcf62fe4db186554b1beff564dbaa6840  0006-arm64-dts-rockchip-rk3588-add-cpu-frequency-scaling-.patch
-e228a2075100ee29f00ddd865e365f4c94b365b129fe3db32e6b79250d919209baa60a30e1e01a786a6d345cd7064ecf61e5630d5bca0ddc3e32a5716f550524  0007-arm64-dts-rockchip-enable-RK3588-tsadc-by-default.patch
-de6a57e019efaa226e2ae3097b3aed736d8461e9abd3ab142dbb0373fa9f3283e028594394aea890cd645dd85496ba35e15380118512916382537a0d9d90500b  0008-cpufreq-rockchip-Introduce-driver-for-rk3588.patch
-a55d763956dd172eb9dd17567396ec12e2b169216e1dcf16514b57755d7e34260fcd6711c3e7494d7003f4ba49c371ff56ad3987526406270dde69137dcf7da0  0009-rk1-Enable-cpufreq-thermal-USB-2.0-OTG.patch
+f08961b00d74b902597b6ca4859457c65e66e1a43dfbbee83bd09a5219cd75a69b6df5dc1aabbcb9b57f17f141ea3d1fd072e826b9711415d95bd7772d9263e8  0001-arm64-dts-rockchip-Add-Turing-RK1-SoM-support.patch
+e03b491b576640ab00a9db4dd81631db718331a9fd1a0033eb0a09eb840188da1876436efe8c144a2634bb52c978869a0178225bab9af6164b61ee6aa64e179c  0002-arm64-dts-rockchip-Fix-Turing-RK1-interrupt-pinctrls.patch
+a790775dd7325b66d43404abd20b46a9c81ba9944ef5bd9b7c18e7ae8801b45185b4bda4de69b21647d5e478562c7263630c3fa25b74bda08b8cfbfd2603f1c0  0003-arm64-dts-rockchip-Fix-eMMC-Data-Strobe-PD-on-rk3588.patch
+6839f096a755ab1ba2d8d5cd01b71bc997d5f35495bfbbbf93a99c074c46763e1d75afc5097da74347975c8f75de4cd0e5ff1a477c59c8632b68b9e3f2166e42  0005-usb-dwc3-host-Disable-USB3-ports-if-maximum-speed-do.patch
+a39ccc305c7b8f287badadc2bf9b6bb4d2b95a808291bb97414531333a3aa5d675f250b5667bcc211b6b14a9845ca54d6235b50595904b2629fd894d33412a9f  0004-xhci-Introduce-disable-usb3-DT-property-quirk.patch
+632b7def172a92e420bb84ea9101b84e410aef5f1f0d18da19eb2e6845e30e7c9dd6fcd59bc8c9370a4ca49979e81d1116ceeadbb644fe2f86b231a5b6e6833d  0006-arm64-dts-rockchip-Add-PCIe-pinctrls-to-Turing-RK1.patch
+fe43bbf9e0ef8653b6325845e547f530ca2ddd0f2aca45229c2f6e14c4492b6bb3310faf4c3d493911853d990e4681561c7e8132dd65734d0f99e3263858ae56  0007-arm64-dts-rockchip-rk3588-add-cpu-frequency-scaling-.patch
+8d8b3f520975b96ee6bd7387634f14e01ae0c0b89d475882f61f43a5be23b7f145a5e7cbe7cf987536b1337c32600923e3dab1aa3d5a7f52c45ceac5cb547294  0008-arm64-dts-rockchip-enable-RK3588-tsadc-by-default.patch
+aa0b46a7dfbac99ca8f6b24e42f5ea29ad7934984e70eb8b992a733fc03c6c1db137a0d13394fcbbfd2d2f63f9908c6e3b1572c222d81825be27c4e17cc5d876  0009-cpufreq-rockchip-Introduce-driver-for-rk3588.patch
+4dc03bbbc6c519a5d38fa9aecbab64301da5cc7eea9b59e811e5ac55143b69ccef4fd05d029992f7ecce4fcc323526b28a1d29f76d653e5918a31bdd7ce0624a  0010-rk1-Enable-cpufreq-thermal-USB-2.0-OTG.patch
 30f630a1ad9f3e83423ae48d34e16606d115f3cca0b394968de35ea91a553f2803f28393b0e8b10298449b58323f5d6b5f11e48aa0cdd8e56de140190545cd25  turing.aarch64.config
 b9abd0117714e57c00a62f9dbe2e8439440419ed232ec3b87c3ecbc3fa740e29f7abcba41a381d589c138438f8cf5c4614d705053584a292102eb6bc7050bb45  patch-6.6.2.xz
 "

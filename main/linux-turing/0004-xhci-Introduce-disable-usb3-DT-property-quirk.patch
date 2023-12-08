@@ -1,8 +1,19 @@
-From 1921124fb4753598c3ad1995f7c4fb46735c0b2a Mon Sep 17 00:00:00 2001
+From a9251b4fdd86a497d60fb1aa4ecdfc313587a977 Mon Sep 17 00:00:00 2001
 From: Sam Edwards <CFSworks@gmail.com>
 Date: Thu, 23 Nov 2023 11:46:21 -0800
-Subject: [PATCH 4/9] xhci: Add "disable-usb3" DT property
+Subject: [PATCH 04/10] xhci: Introduce "disable-usb3" DT property/quirk
 
+Some systems may have xHCI controllers that enumerate USB 3.0 ports, but
+these ports nevertheless cannot be used. Perhaps enabling them triggers a
+hardware bug, or perhaps they simply aren't connected and it would be
+confusing to the user to see an unusable USB 3.0 rhub show up -- whatever
+the case may be, it's reasonable to want to disable these ports.
+
+Add a DT property (and associated quirk) to the xHCI driver that skips
+over (i.e. ignores and doesn't initialize) any USB 3.0 ports discovered
+during driver initialization.
+
+Signed-off-by: Sam Edwards <CFSworks@gmail.com>
 ---
  Documentation/devicetree/bindings/usb/usb-xhci.yaml | 4 ++++
  drivers/usb/host/xhci-mem.c                         | 4 ++++

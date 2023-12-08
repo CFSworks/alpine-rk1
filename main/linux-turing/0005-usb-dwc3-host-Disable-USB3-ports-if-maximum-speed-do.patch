@@ -1,0 +1,68 @@
+From 1c5d2977afe82d5ee1dad48949944de296cf33c4 Mon Sep 17 00:00:00 2001
+From: Sam Edwards <CFSworks@gmail.com>
+Date: Thu, 23 Nov 2023 11:46:47 -0800
+Subject: [PATCH 05/10] usb: dwc3: host: Disable USB3 ports if maximum-speed
+ doesn't permit USB3
+
+The DWC3 core can be configured (during IP instantiation, and/or via
+configuration signals) not to have any USB3 ports. Some SoCs, however,
+may have USB3 interfaces enabled that do not have USB3 PHYs driving
+them. This can be due to a few circumstances, including:
+a) The hardware designer didn't include USB3 PHYs and neglected to
+   disable the DWC3 core's USB ports (I know of no instance where this
+   has actually happened, however, and it seems pretty unlikely).
+b) The USB3 PHYs are present but powered off. Perhaps a driver to enable
+   the PHYs has not yet been written or merged, or USB3 capability is
+   unneeded in the system and the system designer would like to conserve
+   power.
+c) The USB3 PHYs are muxed to a different controller. This can happen if
+   the PHYs support non-USB protocols and one of these alternate
+   functions is needed instead.
+
+In these circumstances, if the DWC3 does not receive clear link status
+indication on an enabled USB3 port, the DWC3 may not allow even USB2
+to function: in host mode, the DWC3 generates an endless barrage of
+PORT_CSC status on the accompanying USB2 port, and the xHCI driver is
+unable to bring the USB2 port to a functioning state.
+
+Fix this by first checking if the maximum-speed property in the DT
+permits USB3. If not, pass the new `disable-usb3;` property to the
+virtual xHCI device, causing the xHCI driver not to enable the USB3
+ports. This allows USB2 to function even with USB3 PHYs
+missing/misbehaving, and may be useful even when the USB3 PHYs are
+well-behaved: a DT author may know that USB3 support is intact, but
+disconnected (not exposed off-board) and choose to lower the
+maximum-speed property to avoid an unusable USB3 rhub showing up in
+sysfs/lsusb where it may mislead end-users.
+
+Signed-off-by: Sam Edwards <CFSworks@gmail.com>
+---
+ drivers/usb/dwc3/host.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+index 61f57fe5bb78..29f170927e70 100644
+--- a/drivers/usb/dwc3/host.c
++++ b/drivers/usb/dwc3/host.c
+@@ -61,7 +61,7 @@ static int dwc3_host_get_irq(struct dwc3 *dwc)
+ 
+ int dwc3_host_init(struct dwc3 *dwc)
+ {
+-	struct property_entry	props[4];
++	struct property_entry	props[5];
+ 	struct platform_device	*xhci;
+ 	int			ret, irq;
+ 	int			prop_idx = 0;
+@@ -95,6 +95,9 @@ int dwc3_host_init(struct dwc3 *dwc)
+ 	if (dwc->usb2_lpm_disable)
+ 		props[prop_idx++] = PROPERTY_ENTRY_BOOL("usb2-lpm-disable");
+ 
++	if (dwc->maximum_speed == USB_SPEED_FULL || dwc->maximum_speed == USB_SPEED_HIGH)
++		props[prop_idx++] = PROPERTY_ENTRY_BOOL("disable-usb3");
++
+ 	/**
+ 	 * WORKAROUND: dwc3 revisions <=3.00a have a limitation
+ 	 * where Port Disable command doesn't work.
+-- 
+2.41.0
+

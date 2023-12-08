@@ -1,7 +1,7 @@
-From d5fe201c444c4bc8f25f0b521ad5dbab87d38a6f Mon Sep 17 00:00:00 2001
-From: Sam Edwards <CFSworks@gmail.com>
-Date: Tue, 21 Nov 2023 13:24:50 -0800
-Subject: [PATCH 2/9] arm64: dts: rockchip: Fix eMMC Data Strobe PD
+From ff6f5d780fd3847687f0a73e2e549bcd268ad3a5 Mon Sep 17 00:00:00 2001
+From: Sam Edwards <cfsworks@gmail.com>
+Date: Tue, 5 Dec 2023 12:29:00 -0800
+Subject: [PATCH 03/10] arm64: dts: rockchip: Fix eMMC Data Strobe PD on rk3588
 
 JEDEC standard JESD84-B51 defines the eMMC Data Strobe line, which is
 currently used only in HS400 mode, as a device->host clock signal that
@@ -34,6 +34,8 @@ devicetrees.
 
 Fixes: d85f8a5c798d5 ("arm64: dts: rockchip: Add rk3588 pinctrl data")
 Signed-off-by: Sam Edwards <CFSworks@gmail.com>
+Link: https://lore.kernel.org/r/20231205202900.4617-2-CFSworks@gmail.com
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 ---
  arch/arm64/boot/dts/rockchip/rk3588s-pinctrl.dtsi | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
