@@ -1,0 +1,64 @@
+From e9f3f86c818d07bc9759f035da68ee518ceeb79a Mon Sep 17 00:00:00 2001
+From: Sam Edwards <CFSworks@gmail.com>
+Date: Fri, 15 Dec 2023 13:58:09 -0700
+Subject: [PATCH] arm64: dts: rockchip: rk3588: Fix USB PD clocks
+
+The QoS blocks saved/restored when toggling the PD_USB power domain are
+clocked by ACLK_USB. Attempting to access these memory regions without
+that clock running will result in an indefinite CPU stall.
+
+The PD_USB node wasn't specifying this clock dependency, resulting in
+hangs when trying to toggle the power domain (either on or off), unless
+we get "lucky" and have ACLK_USB running for another reason at the time.
+This "luck" can result from the bootloader leaving USB powered/clocked,
+and if no built-in driver wants USB, Linux will disable the unused
+PD+CLK on boot when {pd,clk}_ignore_unused aren't given. This can also
+be unlucky because the two cleanup tasks run in parallel and race: if
+the CLK is disabled first, the PD deactivation stalls the boot. In any
+case, the PD cannot then be reenabled (if e.g. the driver loads later)
+once the clock has been stopped.
+
+Fix this by specifying a dependency on ACLK_USB, instead of only
+ACLK_USB_ROOT. The child-parent relationship means the former implies
+the latter anyway. By the same token, remove the redundant HCLK_USB_ROOT
+reference, since that's also implied by its HCLK_HOST* grandchildren.
+
+Fixes: c9211fa2602b8 ("arm64: dts: rockchip: Add base DT for rk3588 SoC")
+Signed-off-by: Sam Edwards <CFSworks@gmail.com>
+---
+
+Hi list,
+
+Feel free to tell me to knock the HCLK_USB_ROOT change out of there, since it's
+not strictly necessary for this fix. It was a "while I'm at it, let's remove
+this redundant reference" thing. :)
+
+I also do not know quite enough about debugfs to know how to manually request
+clocks and PDs, but if such a mechanism exists, it would be a good way to
+confirm the correctness of this fix: ensure ACLK_USB is stopped, then try to
+toggle PD_USB a few times.
+
+Cheers,
+Sam
+
+---
+ arch/arm64/boot/dts/rockchip/rk3588s.dtsi | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588s.dtsi b/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
+index fd1b5d02ba16..32d7e49f03d3 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
+@@ -1341,8 +1341,7 @@ power-domain@RK3588_PD_RGA31 {
+ 			power-domain@RK3588_PD_USB {
+ 				reg = <RK3588_PD_USB>;
+ 				clocks = <&cru PCLK_PHP_ROOT>,
+-					 <&cru ACLK_USB_ROOT>,
+-					 <&cru HCLK_USB_ROOT>,
++					 <&cru ACLK_USB>,
+ 					 <&cru HCLK_HOST0>,
+ 					 <&cru HCLK_HOST_ARB0>,
+ 					 <&cru HCLK_HOST1>,
+-- 
+2.41.0
+

@@ -7,7 +7,7 @@ case $pkgver in
 	*.*.*)	_kernver=${pkgver%.*};;
 	*.*) _kernver=$pkgver;;
 esac
-pkgrel=0
+pkgrel=1
 pkgdesc="Linux kernel with Turing patches"
 url="https://www.kernel.org"
 depends="initramfs-generator"
@@ -26,6 +26,7 @@ source="https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/linux-$_kernver
 	0001-PCI-brcmstb-Configure-HW-CLKREQ-mode-appropriate-for-downstream-device.patch
 
 	0001-arm64-dts-rockchip-Add-Turing-RK1-SoM-support.patch
+	0001-arm64-dts-rockchip-rk3588-Fix-USB-PD-clocks.patch
 	0002-arm64-dts-rockchip-Fix-Turing-RK1-interrupt-pinctrls.patch
 	0004-xhci-Introduce-disable-usb3-DT-property-quirk.patch
 	0005-usb-dwc3-host-Disable-USB3-ports-if-maximum-speed-do.patch
@@ -339,6 +340,7 @@ sha512sums="
 2956050bb332411d00a285e9656618f2e34b631492bbc19bef54d83a6e91b8531f4e18830b9313cfe52fbf8a8ca6fb76cf55b3ddd146ca3b977046cf2fd10cad  0004-objtool-respect-AWK-setting.patch
 4b16f15b47b5e5835b926126e39723f519290469517875cfb2d2b857a93ad1344f0d1ba4b255289e20f4da9c867647526b344f752981cee0a48c51577badac3f  0005-powerpc-config-defang-gcc-check-for-stack-protector-.patch
 5487c5f112d002a7f2abd6e8c09ff1ab043016de3ed85d4502cd092e92f9422d5381306decda6e7a577a39b324bd460f51d09959038f465cf630098cbab19b97  0001-PCI-brcmstb-Configure-HW-CLKREQ-mode-appropriate-for-downstream-device.patch
+53c19c7bc4ec94e6938827160245b5a416f5e968051657de5732024aa546e8f5b8d72e14c31f27ee1c0519f43714913426f828582a91a9ccb740aeb0fbb0ffdf  0001-arm64-dts-rockchip-rk3588-Fix-USB-PD-clocks.patch
 f08961b00d74b902597b6ca4859457c65e66e1a43dfbbee83bd09a5219cd75a69b6df5dc1aabbcb9b57f17f141ea3d1fd072e826b9711415d95bd7772d9263e8  0001-arm64-dts-rockchip-Add-Turing-RK1-SoM-support.patch
 e03b491b576640ab00a9db4dd81631db718331a9fd1a0033eb0a09eb840188da1876436efe8c144a2634bb52c978869a0178225bab9af6164b61ee6aa64e179c  0002-arm64-dts-rockchip-Fix-Turing-RK1-interrupt-pinctrls.patch
 a39ccc305c7b8f287badadc2bf9b6bb4d2b95a808291bb97414531333a3aa5d675f250b5667bcc211b6b14a9845ca54d6235b50595904b2629fd894d33412a9f  0004-xhci-Introduce-disable-usb3-DT-property-quirk.patch
