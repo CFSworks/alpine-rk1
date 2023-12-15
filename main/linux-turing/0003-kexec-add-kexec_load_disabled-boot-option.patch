@@ -1,7 +1,7 @@
-From 07bd7329f06fdbc36e00aacb26ae74a44564ea10 Mon Sep 17 00:00:00 2001
+From cf29b5a58ef88adf96317c3c933a16f9c865e09a Mon Sep 17 00:00:00 2001
 From: Natanael Copa <ncopa@alpinelinux.org>
 Date: Thu, 14 Jul 2022 13:23:51 +0200
-Subject: [PATCH] kexec: add kexec_load_disabled boot option
+Subject: [PATCH 3/5] kexec: add kexec_load_disabled boot option
 
 Make kexec_load disabled by default and add a boot option to enable it:
 kexec_load_disabled=0
@@ -32,5 +32,5 @@ index 9dc728982d79..7650ffe5631e 100644
  #ifdef CONFIG_SYSCTL
  static int kexec_limit_handler(struct ctl_table *table, int write,
 -- 
-2.41.0
+2.43.0
 
