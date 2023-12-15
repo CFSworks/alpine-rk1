@@ -1,46 +1,5 @@
-From 67747f6fe9be86228f528a5fece9922bc459ca7e Mon Sep 17 00:00:00 2001
-From: Joshua-Riek <jjriek@verizon.net>
-Date: Sat, 18 Nov 2023 19:17:31 -0500
-Subject: [PATCH] board: rockchip: add the Turing RK1 SoM
-
-The Turing RK1 is a Rockchip RK3588 based SoM from Turing Machines.
-
-Features tested on a Turing RK1 16GB v1.2:
-- eMMC boot
-- PCIe 3.0 x4
-- PCIe 2.0 x1
-- Ethernet
-
-Kernel commit:
-2806a69f3fef ("arm64: dts: rockchip: Add Turing RK1 SoM support")
-
-Signed-off-by: Joshua-Riek <jjriek@verizon.net>
----
- arch/arm/dts/Makefile                         |   1 +
- arch/arm/dts/rk3588-turing-rk1-u-boot.dtsi    |  26 +
- arch/arm/dts/rk3588-turing-rk1.dts            |  21 +
- arch/arm/dts/rk3588-turing-rk1.dtsi           | 614 ++++++++++++++++++
- arch/arm/mach-rockchip/rk3588/Kconfig         |   7 +
- board/turing/turing-rk1-rk3588/Kconfig        |  15 +
- board/turing/turing-rk1-rk3588/MAINTAINERS    |   9 +
- board/turing/turing-rk1-rk3588/Makefile       |   6 +
- .../turing-rk1-rk3588/turing-rk1-rk3588.c     |  39 ++
- configs/turing-rk1-rk3588_defconfig           | 133 ++++
- doc/board/rockchip/rockchip.rst               |   1 +
- include/configs/turing-rk1-rk3588.h           |  21 +
- 12 files changed, 893 insertions(+)
- create mode 100644 arch/arm/dts/rk3588-turing-rk1-u-boot.dtsi
- create mode 100644 arch/arm/dts/rk3588-turing-rk1.dts
- create mode 100644 arch/arm/dts/rk3588-turing-rk1.dtsi
- create mode 100644 board/turing/turing-rk1-rk3588/Kconfig
- create mode 100644 board/turing/turing-rk1-rk3588/MAINTAINERS
- create mode 100644 board/turing/turing-rk1-rk3588/Makefile
- create mode 100644 board/turing/turing-rk1-rk3588/turing-rk1-rk3588.c
- create mode 100644 configs/turing-rk1-rk3588_defconfig
- create mode 100644 include/configs/turing-rk1-rk3588.h
-
 diff --git a/arch/arm/dts/Makefile b/arch/arm/dts/Makefile
-index 1be08c5fdc2e..97355d84dea0 100644
+index 1be08c5fdc..97355d84de 100644
 --- a/arch/arm/dts/Makefile
 +++ b/arch/arm/dts/Makefile
 @@ -195,6 +195,7 @@ dtb-$(CONFIG_ROCKCHIP_RK3588) += \
@@ -53,10 +12,10 @@ index 1be08c5fdc2e..97355d84dea0 100644
  
 diff --git a/arch/arm/dts/rk3588-turing-rk1-u-boot.dtsi b/arch/arm/dts/rk3588-turing-rk1-u-boot.dtsi
 new file mode 100644
-index 000000000000..4e43276b5c31
+index 0000000000..06c6f327c1
 --- /dev/null
 +++ b/arch/arm/dts/rk3588-turing-rk1-u-boot.dtsi
-@@ -0,0 +1,26 @@
+@@ -0,0 +1,25 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
 + * Copyright (c) 2023 Joshua Riek <jjriek@verizon.net>
@@ -82,10 +41,9 @@ index 000000000000..4e43276b5c31
 +	clock-frequency = <24000000>;
 +	status = "okay";
 +};
-+
 diff --git a/arch/arm/dts/rk3588-turing-rk1.dts b/arch/arm/dts/rk3588-turing-rk1.dts
 new file mode 100644
-index 000000000000..7bcad28d73b8
+index 0000000000..7bcad28d73
 --- /dev/null
 +++ b/arch/arm/dts/rk3588-turing-rk1.dts
 @@ -0,0 +1,21 @@
@@ -112,7 +70,7 @@ index 000000000000..7bcad28d73b8
 +};
 diff --git a/arch/arm/dts/rk3588-turing-rk1.dtsi b/arch/arm/dts/rk3588-turing-rk1.dtsi
 new file mode 100644
-index 000000000000..9570b34aca2e
+index 0000000000..9570b34aca
 --- /dev/null
 +++ b/arch/arm/dts/rk3588-turing-rk1.dtsi
 @@ -0,0 +1,614 @@
@@ -731,10 +689,10 @@ index 000000000000..9570b34aca2e
 +	status = "okay";
 +};
 diff --git a/arch/arm/mach-rockchip/rk3588/Kconfig b/arch/arm/mach-rockchip/rk3588/Kconfig
-index e5282dd1125c..7ff605cbe2e4 100644
+index e5282dd112..a2193fbd41 100644
 --- a/arch/arm/mach-rockchip/rk3588/Kconfig
 +++ b/arch/arm/mach-rockchip/rk3588/Kconfig
-@@ -132,6 +132,12 @@ config TARGET_QUARTZPRO64_RK3588
+@@ -132,6 +132,29 @@ config TARGET_QUARTZPRO64_RK3588
  	  Pine64 QuartzPro64 is a Rockchip RK3588 based SBC (Single Board
  	  Computer) by Pine64.
  
@@ -744,10 +702,27 @@ index e5282dd1125c..7ff605cbe2e4 100644
 +	help
 +	  The Turing RK1 is a Rockchip RK3588 based SoM from Turing Machines.
 +
++	  There are three variants depending on the DRAM size : 8G, 16G and 32G.
++
++	  Specifications:
++
++	  Rockchip RK3588 SoC
++	  4x ARM Cortex-A76, 4x ARM Cortex-A55
++	  8/16/32GB memory LPDDR4x
++	  Mali G610MC4 GPU
++	  32GB eMMC HS400
++	  2x USB 2.0, 2x USB 3.0
++	  2x MIPI CSI 4x lanes
++	  1x MIPI-DSI DPHY 2x lanes
++	  PCIe 2.0 x1, PCIe 3.0 x4
++	  1x HDMI 2.1 output, 1x DP 1.4 output
++	  Gigabit Ethernet
++	  Size: 69.6mm x 45mm (260-pin SO-DIMM connector)
++
  config ROCKCHIP_BOOT_MODE_REG
  	default 0xfd588080
  
-@@ -147,6 +153,7 @@ config SYS_MALLOC_F_LEN
+@@ -147,6 +170,7 @@ config SYS_MALLOC_F_LEN
  source board/edgeble/neural-compute-module-6/Kconfig
  source board/friendlyelec/nanopc-t6-rk3588/Kconfig
  source board/pine64/quartzpro64-rk3588/Kconfig
@@ -757,7 +732,7 @@ index e5282dd1125c..7ff605cbe2e4 100644
  source board/radxa/rock5b-rk3588/Kconfig
 diff --git a/board/turing/turing-rk1-rk3588/Kconfig b/board/turing/turing-rk1-rk3588/Kconfig
 new file mode 100644
-index 000000000000..4c6cd6af3430
+index 0000000000..4c6cd6af34
 --- /dev/null
 +++ b/board/turing/turing-rk1-rk3588/Kconfig
 @@ -0,0 +1,15 @@
@@ -778,7 +753,7 @@ index 000000000000..4c6cd6af3430
 +endif
 diff --git a/board/turing/turing-rk1-rk3588/MAINTAINERS b/board/turing/turing-rk1-rk3588/MAINTAINERS
 new file mode 100644
-index 000000000000..4f313732fa13
+index 0000000000..4f313732fa
 --- /dev/null
 +++ b/board/turing/turing-rk1-rk3588/MAINTAINERS
 @@ -0,0 +1,9 @@
@@ -793,7 +768,7 @@ index 000000000000..4f313732fa13
 +F:	arch/arm/dts/rk3588-turing-rk1-u-boot.dtsi
 diff --git a/board/turing/turing-rk1-rk3588/Makefile b/board/turing/turing-rk1-rk3588/Makefile
 new file mode 100644
-index 000000000000..a979d8023aac
+index 0000000000..a979d8023a
 --- /dev/null
 +++ b/board/turing/turing-rk1-rk3588/Makefile
 @@ -0,0 +1,6 @@
@@ -805,7 +780,7 @@ index 000000000000..a979d8023aac
 +obj-y += turing-rk1-rk3588.o
 diff --git a/board/turing/turing-rk1-rk3588/turing-rk1-rk3588.c b/board/turing/turing-rk1-rk3588/turing-rk1-rk3588.c
 new file mode 100644
-index 000000000000..e2338a2a35aa
+index 0000000000..e2338a2a35
 --- /dev/null
 +++ b/board/turing/turing-rk1-rk3588/turing-rk1-rk3588.c
 @@ -0,0 +1,39 @@
@@ -850,7 +825,7 @@ index 000000000000..e2338a2a35aa
 +#endif
 diff --git a/configs/turing-rk1-rk3588_defconfig b/configs/turing-rk1-rk3588_defconfig
 new file mode 100644
-index 000000000000..289f2da775c5
+index 0000000000..289f2da775
 --- /dev/null
 +++ b/configs/turing-rk1-rk3588_defconfig
 @@ -0,0 +1,133 @@
@@ -988,7 +963,7 @@ index 000000000000..289f2da775c5
 +CONFIG_USB_FUNCTION_ROCKUSB=y
 +CONFIG_ERRNO_STR=y
 diff --git a/doc/board/rockchip/rockchip.rst b/doc/board/rockchip/rockchip.rst
-index 18d0b6f08910..9fe69fc9422f 100644
+index 18d0b6f089..9fe69fc942 100644
 --- a/doc/board/rockchip/rockchip.rst
 +++ b/doc/board/rockchip/rockchip.rst
 @@ -117,6 +117,7 @@ List of mainline supported Rockchip boards:
@@ -1001,10 +976,10 @@ index 18d0b6f08910..9fe69fc9422f 100644
       - Xunlong Orange Pi 5 (orangepi-5-rk3588s)
 diff --git a/include/configs/turing-rk1-rk3588.h b/include/configs/turing-rk1-rk3588.h
 new file mode 100644
-index 000000000000..1e7e58f72cf6
+index 0000000000..760f3c6ab3
 --- /dev/null
 +++ b/include/configs/turing-rk1-rk3588.h
-@@ -0,0 +1,21 @@
+@@ -0,0 +1,15 @@
 +/* SPDX-License-Identifier: GPL-2.0+ */
 +/*
 + * Copyright (c) 2023 Rockchip Electronics Co., Ltd.
@@ -1018,11 +993,5 @@ index 000000000000..1e7e58f72cf6
 +		"stderr=serial,vidconsole\0"
 +
 +#include <configs/rk3588_common.h>
-+
-+#ifdef BOOT_TARGETS
-+#undef BOOT_TARGETS
-+#endif
-+
-+#define BOOT_TARGETS	"mmc1 nvme scsi usb mmc0 pxe dhcp spi"
 +
 +#endif /* __TURINGRK1_RK3588_H */
