@@ -7,7 +7,7 @@ case $pkgver in
 	*.*.*)	_kernver=${pkgver%.*};;
 	*.*) _kernver=$pkgver;;
 esac
-pkgrel=1
+pkgrel=2
 pkgdesc="Linux kernel with Turing patches"
 url="https://www.kernel.org"
 depends="initramfs-generator"
@@ -350,6 +350,6 @@ fe43bbf9e0ef8653b6325845e547f530ca2ddd0f2aca45229c2f6e14c4492b6bb3310faf4c3d4939
 8d8b3f520975b96ee6bd7387634f14e01ae0c0b89d475882f61f43a5be23b7f145a5e7cbe7cf987536b1337c32600923e3dab1aa3d5a7f52c45ceac5cb547294  0008-arm64-dts-rockchip-enable-RK3588-tsadc-by-default.patch
 aa0b46a7dfbac99ca8f6b24e42f5ea29ad7934984e70eb8b992a733fc03c6c1db137a0d13394fcbbfd2d2f63f9908c6e3b1572c222d81825be27c4e17cc5d876  0009-cpufreq-rockchip-Introduce-driver-for-rk3588.patch
 4dc03bbbc6c519a5d38fa9aecbab64301da5cc7eea9b59e811e5ac55143b69ccef4fd05d029992f7ecce4fcc323526b28a1d29f76d653e5918a31bdd7ce0624a  0010-rk1-Enable-cpufreq-thermal-USB-2.0-OTG.patch
-12bbc60de016c37972e691ce8299f631fbb6d7203ca03efc33be7e0dd78d11bd74efb6b5c9faf8864282a48ce00b889aa8d55385e404055065da9100319befaf  turing.aarch64.config
+3dcd694a0982d98560893fe7d0616c04ea5ee64b8e79670aa8861e33aead51d790121a14e9d3c2510b1438b2d28ca98034916f050b7561cae5d426143882d0db  turing.aarch64.config
 fffb1dd7cb74c7eaba08bc3f954ce04cf4ea799fdf1d0835fc0fce268b9a108c6b041dfb45b5e5691dde823c6b6d0071ef925e8e21056f41ec9b0171747004b9  patch-6.6.7.xz
 "
