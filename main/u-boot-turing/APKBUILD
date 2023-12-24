@@ -2,7 +2,7 @@
 # Contributor: Timo Teras <timo.teras@iki.fi>
 # Maintainer: Milan P. Stanić <mps@arvanta.net>
 pkgname=u-boot-turing
-pkgver=2024.01_rc3
+pkgver=2024.01_rc5
 pkgrel=1
 pkgdesc="u-boot bootloader Turing RK1 support"
 url="https://www.denx.de/wiki/U-Boot/"
@@ -139,7 +139,7 @@ for board_config in $board_configs; do
 done
 
 sha512sums="
-51a45e6a0008ef04570b6357518c85fd22604be0090ad5bf1dc7c821eb34ea33441314c49128dd0bd3084406b7138497044bb47f7e57d38a680768fb9f2f6577  u-boot-2024.01-rc3.tar.bz2
+6bd072ff5812f0201d03180b2b6d3b589434b6d7b388d515aa4eda81c86c7914b58835383911d871af94fd5a655d3fbd2a64bd8965705d8557eb2d9025037f2d  u-boot-2024.01-rc5.tar.bz2
 f8c9bb6e84d6f0620c976ac7ad5dd7ec7ff9dfdd4b1d03d2bf6653e7beccf80bdf2debfc92fb1f696dba92fb40287d3c45897e0078951451d0835cb61a5f16d1  README.txt
 6cf882785fa12abcfdfa82119f6a3446229bc75f4c19d5751676625dda81df5ca428c2b631187ecbc39261b081b1a8b53bceeac9f43a3229f7610abc4d9862a2  update-u-boot
 83fc42c698f8236ba1f7d71383863e0bda255ada85bb885856a24b2036944d230d918a9d965d5ff90720726c9ee85ffda5e88eefc27b94ef9e7b4f456dcfb195  fix-tools-build.patch
