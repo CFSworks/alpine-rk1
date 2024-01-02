@@ -2,7 +2,7 @@
 
 _flavor=turing
 pkgname=linux-$_flavor
-pkgver=6.6.8
+pkgver=6.6.9
 case $pkgver in
 	*.*.*)	_kernver=${pkgver%.*};;
 	*.*) _kernver=$pkgver;;
@@ -351,5 +351,5 @@ fe43bbf9e0ef8653b6325845e547f530ca2ddd0f2aca45229c2f6e14c4492b6bb3310faf4c3d4939
 aa0b46a7dfbac99ca8f6b24e42f5ea29ad7934984e70eb8b992a733fc03c6c1db137a0d13394fcbbfd2d2f63f9908c6e3b1572c222d81825be27c4e17cc5d876  0009-cpufreq-rockchip-Introduce-driver-for-rk3588.patch
 4dc03bbbc6c519a5d38fa9aecbab64301da5cc7eea9b59e811e5ac55143b69ccef4fd05d029992f7ecce4fcc323526b28a1d29f76d653e5918a31bdd7ce0624a  0010-rk1-Enable-cpufreq-thermal-USB-2.0-OTG.patch
 3dcd694a0982d98560893fe7d0616c04ea5ee64b8e79670aa8861e33aead51d790121a14e9d3c2510b1438b2d28ca98034916f050b7561cae5d426143882d0db  turing.aarch64.config
-1bdf6186ef52831d508dacf740ce6c18eccca71a6426e294d5d47ebfff26a716c58db1963c439760ef104a594db5fa888d3374bc113af229794cca9362692dfe  patch-6.6.8.xz
+adf3505296a700b6e01a72f3888e803eb2b1affcb8b4a086e2b116c2ed314494a447516e8ef15029ab3643da2b6c7c8585ea16c32bd32d07efffa4e9531a13a3  patch-6.6.9.xz
 "
