@@ -119,28 +119,28 @@ index 59137a447ef3..bbb6d38cd159 100644
 +&soc_thermal {
 +	trips {
 +		soc_active1: trip-active1 {
-+			temperature = <37500>;
-+			hysteresis = <1000>;
++			temperature = <45000>;
++			hysteresis = <5000>;
 +			type = "active";
 +		};
 +		soc_active2: trip-active2 {
-+			temperature = <42500>;
-+			hysteresis = <2000>;
++			temperature = <50000>;
++			hysteresis = <5000>;
 +			type = "active";
 +		};
 +		soc_active3: trip-active3 {
-+			temperature = <47500>;
-+			hysteresis = <2000>;
++			temperature = <60000>;
++			hysteresis = <5000>;
 +			type = "active";
 +		};
 +		soc_active4: trip-active4 {
-+			temperature = <55000>;
-+			hysteresis = <2000>;
++			temperature = <70000>;
++			hysteresis = <5000>;
 +			type = "active";
 +		};
 +		soc_active5: trip-active5 {
-+			temperature = <65000>;
-+			hysteresis = <2000>;
++			temperature = <80000>;
++			hysteresis = <5000>;
 +			type = "active";
 +		};
 +	};

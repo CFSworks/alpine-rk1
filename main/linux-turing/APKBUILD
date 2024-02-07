@@ -7,7 +7,7 @@ case $pkgver in
 	*.*.*)	_kernver=${pkgver%.*};;
 	*.*) _kernver=$pkgver;;
 esac
-pkgrel=1
+pkgrel=2
 pkgdesc="Linux kernel with Turing patches"
 url="https://www.kernel.org"
 depends="initramfs-generator"
@@ -343,7 +343,7 @@ a39ccc305c7b8f287badadc2bf9b6bb4d2b95a808291bb97414531333a3aa5d675f250b5667bcc21
 fe43bbf9e0ef8653b6325845e547f530ca2ddd0f2aca45229c2f6e14c4492b6bb3310faf4c3d493911853d990e4681561c7e8132dd65734d0f99e3263858ae56  0007-arm64-dts-rockchip-rk3588-add-cpu-frequency-scaling-.patch
 8d8b3f520975b96ee6bd7387634f14e01ae0c0b89d475882f61f43a5be23b7f145a5e7cbe7cf987536b1337c32600923e3dab1aa3d5a7f52c45ceac5cb547294  0008-arm64-dts-rockchip-enable-RK3588-tsadc-by-default.patch
 aa0b46a7dfbac99ca8f6b24e42f5ea29ad7934984e70eb8b992a733fc03c6c1db137a0d13394fcbbfd2d2f63f9908c6e3b1572c222d81825be27c4e17cc5d876  0009-cpufreq-rockchip-Introduce-driver-for-rk3588.patch
-4dc03bbbc6c519a5d38fa9aecbab64301da5cc7eea9b59e811e5ac55143b69ccef4fd05d029992f7ecce4fcc323526b28a1d29f76d653e5918a31bdd7ce0624a  0010-rk1-Enable-cpufreq-thermal-USB-2.0-OTG.patch
+484359e84cd013ab0316657c9a4b987ba5889192fb7511d8dcba975ecfbed16b413030e9ef811669dab454d1929fc92175ba59b44ef8ae3dcc7c2b9a1aa7c468  0010-rk1-Enable-cpufreq-thermal-USB-2.0-OTG.patch
 d53658d262160ec4f99e0c9c95ce8c36afb6e0ea97cf783416730e22b1da252f9cbe2d823bbcafb206ad9e4400ca87d4cb1e4291675510a584d7c465f3dda5a8  turing.aarch64.config
 bba46208ad606a6ef6e77522cee9eac4cd85d19cfcfbd5246cc465549e2b6410a612e1c79ab1527fbff3895e06df83d7a0c62ab048a2d90b0c332648f7284ed2  patch-6.7.4.xz
 "
