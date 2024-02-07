@@ -7,7 +7,7 @@ case $pkgver in
 	*.*.*)	_kernver=${pkgver%.*};;
 	*.*) _kernver=$pkgver;;
 esac
-pkgrel=0
+pkgrel=1
 pkgdesc="Linux kernel with Turing patches"
 url="https://www.kernel.org"
 depends="initramfs-generator"
@@ -336,7 +336,7 @@ de06de556191614bd9daf077ae239360352a402bab407748e67f1e5108c92fd933e451707840ab22
 75f232b6becee7d36d360ffaf2aaa837d13518f9ec620ca159bcb2a0e98eb18a77631406a9b44244ea0164a7ed59fad583823909681e9b894a012f9d13365b69  0003-kexec-add-kexec_load_disabled-boot-option.patch
 2956050bb332411d00a285e9656618f2e34b631492bbc19bef54d83a6e91b8531f4e18830b9313cfe52fbf8a8ca6fb76cf55b3ddd146ca3b977046cf2fd10cad  0004-objtool-respect-AWK-setting.patch
 4b16f15b47b5e5835b926126e39723f519290469517875cfb2d2b857a93ad1344f0d1ba4b255289e20f4da9c867647526b344f752981cee0a48c51577badac3f  0005-powerpc-config-defang-gcc-check-for-stack-protector-.patch
-5487c5f112d002a7f2abd6e8c09ff1ab043016de3ed85d4502cd092e92f9422d5381306decda6e7a577a39b324bd460f51d09959038f465cf630098cbab19b97  0001-PCI-brcmstb-Configure-HW-CLKREQ-mode-appropriate-for-downstream-device.patch
+47c07a59633e048183929d5544d6450f6ef84578200056cebf8bc69131803d0a3449dea93ee084fa6fe911aa64882ede4ec83d93860e2229fbd85b84cacf82c1  0001-PCI-brcmstb-Configure-HW-CLKREQ-mode-appropriate-for-downstream-device.patch
 a39ccc305c7b8f287badadc2bf9b6bb4d2b95a808291bb97414531333a3aa5d675f250b5667bcc211b6b14a9845ca54d6235b50595904b2629fd894d33412a9f  0004-xhci-Introduce-disable-usb3-DT-property-quirk.patch
 6839f096a755ab1ba2d8d5cd01b71bc997d5f35495bfbbbf93a99c074c46763e1d75afc5097da74347975c8f75de4cd0e5ff1a477c59c8632b68b9e3f2166e42  0005-usb-dwc3-host-Disable-USB3-ports-if-maximum-speed-do.patch
 632b7def172a92e420bb84ea9101b84e410aef5f1f0d18da19eb2e6845e30e7c9dd6fcd59bc8c9370a4ca49979e81d1116ceeadbb644fe2f86b231a5b6e6833d  0006-arm64-dts-rockchip-Add-PCIe-pinctrls-to-Turing-RK1.patch
