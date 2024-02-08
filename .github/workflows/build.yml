@@ -16,6 +16,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Free up additional space on runner
+        run: sudo rm -fr /opt/* /usr/share/dotnet /usr/local/share/boost
+
       - name: Preserve ccache
         uses: actions/cache@v3
         with:
