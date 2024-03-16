@@ -2,7 +2,7 @@
 # Contributor: Timo Teras <timo.teras@iki.fi>
 # Maintainer: Milan P. Stanić <mps@arvanta.net>
 pkgname=u-boot-turing
-pkgver=2024.04_rc2
+pkgver=2024.04_rc4
 pkgrel=0
 pkgdesc="u-boot bootloader Turing RK1 support"
 url="https://www.denx.de/wiki/U-Boot/"
@@ -137,7 +137,7 @@ for board_config in $board_configs; do
 done
 
 sha512sums="
-f5c6d6a37ce6b34bd1ab2cddd5d0cacddfd19b5345934731df3a7ed454a3895ad2d14acbdb2e1b922b9571778e50b54cb7612b1798a04dfb991365d3344cd865  u-boot-2024.04-rc2.tar.bz2
+4a546eb790d54c9aadd423888baa5c909249afeedfd71f85c8b424421c08463b0e65f3addfc2d00f4a38fb56d8051ed70c8368d49a89bd33ec69773474d4d62d  u-boot-2024.04-rc4.tar.bz2
 5656e0713c92f1781dd0d417392ad20e7f94e3b0ba92486a1c13b19e0f9d30ee6c7ae339514bf84d3be10ceed59fe2c86e9a8a56c8e20d6ab6a0a53f5e5e48b2  bl31.elf
 f71a2c4489495721f846e7dc07c3d996c412b5113fc03bcc70a38e0d23653c3215d07e85c9f7a0e55318d7bd625eb12476b7aead9cdaacdb888d96cbaa2f3191  rk3588_ddr.bin
 8d76a1adc152c356d10948b4219a904f3ea4a4d1c4ab0ebe6d924be0f0e2a342c1616a405d93d8c001e7ff4bcf9bb76363ed60a4a9cf5dac05ad2856339dafc2  ddrbin_tool
