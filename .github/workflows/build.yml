@@ -48,18 +48,21 @@ jobs:
           ln -s $(which ccache) /usr/lib/ccache/bin/aarch64-none-elf-gcc
           cp -ra /usr/lib/gcc/*alpine*/*/plugin/include/cp/* /usr/lib/gcc/aarch64-none-elf/*/plugin/include/cp/
           cp $PACKAGER_PRIVKEY.pub /etc/apk/keys/
+          mkdir -p /tmp/buildroot/etc /tmp/buildroot/lib /tmp/buildroot/var
+          cp -ra /etc/apk /tmp/buildroot/etc/
+          cp -ra /lib/apk /tmp/buildroot/lib/
         shell: alpine.sh --root {0}
-
-      - name: Run build for linux-turing
-        run: |
-          cd main/linux-turing
-          CHOST=aarch64-none-elf CBUILDROOT=/ CARCH=aarch64 BOOTSTRAP=no abuild -r
-        shell: alpine.sh {0}
 
       - name: Run build for u-boot-turing
         run: |
           cd main/u-boot-turing
-          CHOST=aarch64-none-elf CBUILDROOT=/ CARCH=aarch64 BOOTSTRAP=no abuild -r
+          CHOST=aarch64-none-elf CBUILDROOT=/tmp/buildroot CARCH=aarch64 BOOTSTRAP=no abuild -r
+        shell: alpine.sh {0}
+
+      - name: Run build for linux-turing
+        run: |
+          cd main/linux-turing
+          CHOST=aarch64-none-elf CBUILDROOT=/tmp/buildroot CARCH=aarch64 BOOTSTRAP=no abuild -r
         shell: alpine.sh {0}
 
       - name: Copy public key to packages directory
