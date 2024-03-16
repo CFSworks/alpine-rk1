@@ -1,7 +1,7 @@
-From c30742c8a805ee1fa3ad550568403e0d8f797fd4 Mon Sep 17 00:00:00 2001
+From 7427d456a24fb17a3c4bc1f205a512559866311b Mon Sep 17 00:00:00 2001
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
 Date: Thu, 18 Aug 2022 14:21:30 +0200
-Subject: [PATCH 09/10] cpufreq: rockchip: Introduce driver for rk3588
+Subject: [PATCH 6/7] cpufreq: rockchip: Introduce driver for rk3588
 
 This is a heavily modified port from the downstream driver.
 Downstream used it for multiple rockchip generations, while
@@ -23,7 +23,7 @@ Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
  create mode 100644 drivers/cpufreq/rockchip-cpufreq.c
 
 diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
-index 123b4bbfcfee..6fdc2f0430bb 100644
+index f911606897b8..1e255210851e 100644
 --- a/drivers/cpufreq/Kconfig.arm
 +++ b/drivers/cpufreq/Kconfig.arm
 @@ -189,6 +189,16 @@ config ARM_RASPBERRYPI_CPUFREQ
@@ -44,7 +44,7 @@ index 123b4bbfcfee..6fdc2f0430bb 100644
  	bool "Samsung S3C64XX"
  	depends on CPU_S3C6410
 diff --git a/drivers/cpufreq/Makefile b/drivers/cpufreq/Makefile
-index ef8510774913..c3f8c9cd563f 100644
+index 8d141c71b016..14fb48863f0b 100644
 --- a/drivers/cpufreq/Makefile
 +++ b/drivers/cpufreq/Makefile
 @@ -71,6 +71,7 @@ obj-$(CONFIG_PXA3xx)			+= pxa3xx-cpufreq.o
@@ -56,10 +56,10 @@ index ef8510774913..c3f8c9cd563f 100644
  obj-$(CONFIG_ARM_S5PV210_CPUFREQ)	+= s5pv210-cpufreq.o
  obj-$(CONFIG_ARM_SA1110_CPUFREQ)	+= sa1110-cpufreq.o
 diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
-index fb2875ce1fdd..b8d8e461b83f 100644
+index bd1e1357cef8..cfd35aa52043 100644
 --- a/drivers/cpufreq/cpufreq-dt-platdev.c
 +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
-@@ -166,6 +166,8 @@ static const struct of_device_id blocklist[] __initconst = {
+@@ -168,6 +168,8 @@ static const struct of_device_id blocklist[] __initconst = {
  	{ .compatible = "qcom,sm8450", },
  	{ .compatible = "qcom,sm8550", },
  
@@ -720,5 +720,5 @@ index 000000000000..0bf57ac85e60
 +MODULE_DESCRIPTION("Rockchip cpufreq driver");
 +MODULE_LICENSE("GPL v2");
 -- 
-2.41.0
+2.43.2
 

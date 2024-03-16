@@ -2,12 +2,12 @@
 
 _flavor=turing
 pkgname=linux-$_flavor
-pkgver=6.7.4
+pkgver=6.8.1
 case $pkgver in
 	*.*.*)	_kernver=${pkgver%.*};;
 	*.*) _kernver=$pkgver;;
 esac
-pkgrel=2
+pkgrel=0
 pkgdesc="Linux kernel with Turing patches"
 url="https://www.kernel.org"
 depends="initramfs-generator"
@@ -23,15 +23,13 @@ source="https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/linux-$_kernver
 	0004-objtool-respect-AWK-setting.patch
 	0005-powerpc-config-defang-gcc-check-for-stack-protector-.patch
 
-	0001-PCI-brcmstb-Configure-HW-CLKREQ-mode-appropriate-for-downstream-device.patch
-
-	0004-xhci-Introduce-disable-usb3-DT-property-quirk.patch
-	0005-usb-dwc3-host-Disable-USB3-ports-if-maximum-speed-do.patch
-	0006-arm64-dts-rockchip-Add-PCIe-pinctrls-to-Turing-RK1.patch
-	0007-arm64-dts-rockchip-rk3588-add-cpu-frequency-scaling-.patch
-	0008-arm64-dts-rockchip-enable-RK3588-tsadc-by-default.patch
-	0009-cpufreq-rockchip-Introduce-driver-for-rk3588.patch
-	0010-rk1-Enable-cpufreq-thermal-USB-2.0-OTG.patch
+	0001-xhci-Introduce-disable-usb3-DT-property-quirk.patch
+	0002-usb-dwc3-host-Disable-USB3-ports-if-maximum-speed-do.patch
+	0003-arm64-dts-rockchip-Add-PCIe-pinctrls-to-Turing-RK1.patch
+	0004-arm64-dts-rockchip-rk3588-add-cpu-frequency-scaling-.patch
+	0005-arm64-dts-rockchip-enable-RK3588-tsadc-by-default.patch
+	0006-cpufreq-rockchip-Introduce-driver-for-rk3588.patch
+	0007-rk1-Enable-cpufreq-thermal-USB-2.0-OTG.patch
 
 	turing.aarch64.config
 	"
@@ -330,20 +328,19 @@ _dev() {
 }
 
 sha512sums="
-de06de556191614bd9daf077ae239360352a402bab407748e67f1e5108c92fd933e451707840ab22fe0f9976db3d1e1b60ca9d41cf894f015ca09b3f652b74ad  linux-6.7.tar.xz
+5c4eb4aa1d3f7d1ea01c0f7ddeadacdece6e144fd4bdfc16b2b925d3e10dc04de3a6db69320b79a96c3560052616f001d2c09e7a1bb4f7b731e2380a7ecce068  linux-6.8.tar.xz
 58bf9e84fb01f811f0cada7f7953d111908f0b0650648d6a3522061fe08c9fe284c9315515ae386189253e37d0c92419f78048d6568e2e426654b1e61010685f  0001-powerpc-boot-wrapper-Add-z-notext-flag-for-ppc64le.patch
 763dcb40f698d43b0bb856f44493973e840b66efe62a8fd41a08b6e3fa38cf903e059d107be3735ab2f38a0f27bdb0262798e5e530a1905f96195cd8bcf62fdf  0002-x86-Compress-vmlinux-with-zstd-19-instead-of-22.patch
 75f232b6becee7d36d360ffaf2aaa837d13518f9ec620ca159bcb2a0e98eb18a77631406a9b44244ea0164a7ed59fad583823909681e9b894a012f9d13365b69  0003-kexec-add-kexec_load_disabled-boot-option.patch
 2956050bb332411d00a285e9656618f2e34b631492bbc19bef54d83a6e91b8531f4e18830b9313cfe52fbf8a8ca6fb76cf55b3ddd146ca3b977046cf2fd10cad  0004-objtool-respect-AWK-setting.patch
 4b16f15b47b5e5835b926126e39723f519290469517875cfb2d2b857a93ad1344f0d1ba4b255289e20f4da9c867647526b344f752981cee0a48c51577badac3f  0005-powerpc-config-defang-gcc-check-for-stack-protector-.patch
-47c07a59633e048183929d5544d6450f6ef84578200056cebf8bc69131803d0a3449dea93ee084fa6fe911aa64882ede4ec83d93860e2229fbd85b84cacf82c1  0001-PCI-brcmstb-Configure-HW-CLKREQ-mode-appropriate-for-downstream-device.patch
-a39ccc305c7b8f287badadc2bf9b6bb4d2b95a808291bb97414531333a3aa5d675f250b5667bcc211b6b14a9845ca54d6235b50595904b2629fd894d33412a9f  0004-xhci-Introduce-disable-usb3-DT-property-quirk.patch
-6839f096a755ab1ba2d8d5cd01b71bc997d5f35495bfbbbf93a99c074c46763e1d75afc5097da74347975c8f75de4cd0e5ff1a477c59c8632b68b9e3f2166e42  0005-usb-dwc3-host-Disable-USB3-ports-if-maximum-speed-do.patch
-632b7def172a92e420bb84ea9101b84e410aef5f1f0d18da19eb2e6845e30e7c9dd6fcd59bc8c9370a4ca49979e81d1116ceeadbb644fe2f86b231a5b6e6833d  0006-arm64-dts-rockchip-Add-PCIe-pinctrls-to-Turing-RK1.patch
-fe43bbf9e0ef8653b6325845e547f530ca2ddd0f2aca45229c2f6e14c4492b6bb3310faf4c3d493911853d990e4681561c7e8132dd65734d0f99e3263858ae56  0007-arm64-dts-rockchip-rk3588-add-cpu-frequency-scaling-.patch
-8d8b3f520975b96ee6bd7387634f14e01ae0c0b89d475882f61f43a5be23b7f145a5e7cbe7cf987536b1337c32600923e3dab1aa3d5a7f52c45ceac5cb547294  0008-arm64-dts-rockchip-enable-RK3588-tsadc-by-default.patch
-aa0b46a7dfbac99ca8f6b24e42f5ea29ad7934984e70eb8b992a733fc03c6c1db137a0d13394fcbbfd2d2f63f9908c6e3b1572c222d81825be27c4e17cc5d876  0009-cpufreq-rockchip-Introduce-driver-for-rk3588.patch
-484359e84cd013ab0316657c9a4b987ba5889192fb7511d8dcba975ecfbed16b413030e9ef811669dab454d1929fc92175ba59b44ef8ae3dcc7c2b9a1aa7c468  0010-rk1-Enable-cpufreq-thermal-USB-2.0-OTG.patch
-d53658d262160ec4f99e0c9c95ce8c36afb6e0ea97cf783416730e22b1da252f9cbe2d823bbcafb206ad9e4400ca87d4cb1e4291675510a584d7c465f3dda5a8  turing.aarch64.config
-bba46208ad606a6ef6e77522cee9eac4cd85d19cfcfbd5246cc465549e2b6410a612e1c79ab1527fbff3895e06df83d7a0c62ab048a2d90b0c332648f7284ed2  patch-6.7.4.xz
+0ba6b036182aeb9f1973ced449ce5e2f17907ccf0b0c694b0b1787c17aaa318a5e52ac3bfa53eafff391212d29ac0d3784cf4d17ff617701ca6ccc3958140bd6  0001-xhci-Introduce-disable-usb3-DT-property-quirk.patch
+e27c32c429a338d4eecd9e1e72bcbca339c6c1550e25a1bd2a0ae8781a9629b1adeb31ec0694f522475a35b806823475ed27cd2f6cc107534422882e49c64bf7  0002-usb-dwc3-host-Disable-USB3-ports-if-maximum-speed-do.patch
+d6eda686e53dbc019481696d187f25d137436e44435133a4e8b24583bc586ed2ee93f0c4f2bd35a6ba1af2761fda4d31bfedea6a682f46611f2df6bc65b61e18  0003-arm64-dts-rockchip-Add-PCIe-pinctrls-to-Turing-RK1.patch
+7d4a5bd338e21525eecf6fd6a6c68d48e2db1c0e72d38d65fa4ab1755f67903e149ba2dd27bf7409145805b06d5c042300b92da950a077268f1aebbacdb551f3  0004-arm64-dts-rockchip-rk3588-add-cpu-frequency-scaling-.patch
+2af0571bdef4888267ba7f482334697162a8088d11fe6f654d4b27011164425f1ef830f59415368dce05f30ac93f9d15d0e9e28cbcbf874f5d302577cee72272  0005-arm64-dts-rockchip-enable-RK3588-tsadc-by-default.patch
+94e4c4f4aec437ae0f615e884c56f083a5b83837cb3882a806e12ef07d8de9aaeea033c0d413db57376272237c5c6f05143527a31c16e4694150d69903163cdc  0006-cpufreq-rockchip-Introduce-driver-for-rk3588.patch
+aad689abfbb37ab289b12a4af30e4d8b47ebaaa4d5020b8f827cb598d70ded99b9b1347a9364284fe1b8d3dcc491325dcae97a52f4f77e659bd65980e9679916  0007-rk1-Enable-cpufreq-thermal-USB-2.0-OTG.patch
+2864dcab6e4477ebaf12fcf4f9dd00a100c6e582681028a18cd10baf1dc7c1ff0ed46d9ad1310249553299a7884f3e11c5ec3eb2869104e129473273581abd24  turing.aarch64.config
+33ddb70a2df5ce51e23a82616e02197e4b812e0c094d0c88dd6ea6e2f00d843c2ff124fc15548e0ae3853fc1a6ea605e6b94eff7aa49a34961d7b20b7d27ff6c  patch-6.8.1.xz
 "

@@ -1,17 +1,17 @@
-From 6434fe4f126c9a684d52f68cb819687034300206 Mon Sep 17 00:00:00 2001
+From 94f03297ee5d4d3a18f11f6e11b24e2df0e54966 Mon Sep 17 00:00:00 2001
 From: Sam Edwards <CFSworks@gmail.com>
 Date: Mon, 13 Nov 2023 23:00:00 -0700
-Subject: [PATCH 10/10] rk1: Enable cpufreq, thermal, USB 2.0 OTG
+Subject: [PATCH 7/7] rk1: Enable cpufreq, thermal, USB 2.0 OTG
 
 ---
  .../boot/dts/rockchip/rk3588-turing-rk1.dtsi  | 112 ++++++++++++++++++
  1 file changed, 112 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/rockchip/rk3588-turing-rk1.dtsi b/arch/arm64/boot/dts/rockchip/rk3588-turing-rk1.dtsi
-index 59137a447ef3..bbb6d38cd159 100644
+index b9df3541b7fe..b8e0e713f8e2 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3588-turing-rk1.dtsi
 +++ b/arch/arm64/boot/dts/rockchip/rk3588-turing-rk1.dtsi
-@@ -65,6 +65,57 @@ vcc_1v1_nldo_s3: vcc-1v1-nldo-s3-regulator {
+@@ -63,6 +63,57 @@ vcc_1v1_nldo_s3: vcc-1v1-nldo-s3-regulator {
  		regulator-max-microvolt = <1100000>;
  		vin-supply = <&vcc5v0_sys>;
  	};
@@ -69,7 +69,7 @@ index 59137a447ef3..bbb6d38cd159 100644
  };
  
  &combphy2_psu {
-@@ -73,34 +124,42 @@ &combphy2_psu {
+@@ -71,34 +122,42 @@ &combphy2_psu {
  
  &cpu_b0 {
  	cpu-supply = <&vdd_cpu_big0_s0>;
@@ -112,7 +112,7 @@ index 59137a447ef3..bbb6d38cd159 100644
  };
  
  &gmac1 {
-@@ -272,6 +331,59 @@ &sdhci {
+@@ -270,6 +329,59 @@ &sdhci {
  	status = "okay";
  };
  
@@ -173,5 +173,5 @@ index 59137a447ef3..bbb6d38cd159 100644
  	status = "okay";
  	pinctrl-names = "default";
 -- 
-2.41.0
+2.43.2
 

@@ -1,7 +1,7 @@
-From a9251b4fdd86a497d60fb1aa4ecdfc313587a977 Mon Sep 17 00:00:00 2001
+From 021391595a93afd397fcd2ff2b3498b0c8655a21 Mon Sep 17 00:00:00 2001
 From: Sam Edwards <CFSworks@gmail.com>
 Date: Thu, 23 Nov 2023 11:46:21 -0800
-Subject: [PATCH 04/10] xhci: Introduce "disable-usb3" DT property/quirk
+Subject: [PATCH 1/7] xhci: Introduce "disable-usb3" DT property/quirk
 
 Some systems may have xHCI controllers that enumerate USB 3.0 ports, but
 these ports nevertheless cannot be used. Perhaps enabling them triggers a
@@ -22,7 +22,7 @@ Signed-off-by: Sam Edwards <CFSworks@gmail.com>
  4 files changed, 12 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/usb/usb-xhci.yaml b/Documentation/devicetree/bindings/usb/usb-xhci.yaml
-index 180a261c3e8f..8a64e747260a 100644
+index 4238ae896ef6..f380d3fb4aae 100644
 --- a/Documentation/devicetree/bindings/usb/usb-xhci.yaml
 +++ b/Documentation/devicetree/bindings/usb/usb-xhci.yaml
 @@ -25,6 +25,10 @@ properties:
@@ -37,10 +37,10 @@ index 180a261c3e8f..8a64e747260a 100644
      description: Interrupt moderation interval
      default: 5000
 diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index 0a37f0d511cf..bf8fcab626e4 100644
+index a7716202a8dd..e63e0286d431 100644
 --- a/drivers/usb/host/xhci-mem.c
 +++ b/drivers/usb/host/xhci-mem.c
-@@ -1968,6 +1968,10 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
+@@ -2014,6 +2014,10 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
  	minor_revision = XHCI_EXT_PORT_MINOR(temp);
  
  	if (major_revision == 0x03) {
@@ -52,12 +52,12 @@ index 0a37f0d511cf..bf8fcab626e4 100644
  		/*
  		 * Some hosts incorrectly use sub-minor version for minor
 diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index b93161374293..75285fb5bbbc 100644
+index 3d071b875308..722c7bf5016f 100644
 --- a/drivers/usb/host/xhci-plat.c
 +++ b/drivers/usb/host/xhci-plat.c
-@@ -249,6 +249,9 @@ int xhci_plat_probe(struct platform_device *pdev, struct device *sysdev, const s
- 		if (device_property_read_bool(tmpdev, "quirk-broken-port-ped"))
- 			xhci->quirks |= XHCI_BROKEN_PORT_PED;
+@@ -256,6 +256,9 @@ int xhci_plat_probe(struct platform_device *pdev, struct device *sysdev, const s
+ 		if (device_property_read_bool(tmpdev, "xhci-sg-trb-cache-size-quirk"))
+ 			xhci->quirks |= XHCI_SG_TRB_CACHE_SIZE_QUIRK;
  
 +		if (device_property_read_bool(tmpdev, "disable-usb3"))
 +			xhci->quirks |= XHCI_DISABLE_USB3;
@@ -66,10 +66,10 @@ index b93161374293..75285fb5bbbc 100644
  					 &xhci->imod_interval);
  	}
 diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 5df370482521..c53fbeea478f 100644
+index 6f82d404883f..a409fddbbe90 100644
 --- a/drivers/usb/host/xhci.h
 +++ b/drivers/usb/host/xhci.h
-@@ -1906,6 +1906,7 @@ struct xhci_hcd {
+@@ -1882,6 +1882,7 @@ struct xhci_hcd {
  #define XHCI_RESET_TO_DEFAULT	BIT_ULL(44)
  #define XHCI_ZHAOXIN_TRB_FETCH	BIT_ULL(45)
  #define XHCI_ZHAOXIN_HOST	BIT_ULL(46)
@@ -78,5 +78,5 @@ index 5df370482521..c53fbeea478f 100644
  	unsigned int		num_active_eps;
  	unsigned int		limit_active_eps;
 -- 
-2.41.0
+2.43.2
 

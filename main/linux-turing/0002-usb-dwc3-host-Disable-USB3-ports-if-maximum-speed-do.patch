@@ -1,7 +1,7 @@
-From 1c5d2977afe82d5ee1dad48949944de296cf33c4 Mon Sep 17 00:00:00 2001
+From 42860c32399cf374cbc53acede38933e971561a3 Mon Sep 17 00:00:00 2001
 From: Sam Edwards <CFSworks@gmail.com>
 Date: Thu, 23 Nov 2023 11:46:47 -0800
-Subject: [PATCH 05/10] usb: dwc3: host: Disable USB3 ports if maximum-speed
+Subject: [PATCH 2/7] usb: dwc3: host: Disable USB3 ports if maximum-speed
  doesn't permit USB3
 
 The DWC3 core can be configured (during IP instantiation, and/or via
@@ -41,19 +41,19 @@ Signed-off-by: Sam Edwards <CFSworks@gmail.com>
  1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-index 61f57fe5bb78..29f170927e70 100644
+index 43230915323c..62c3e3c49d20 100644
 --- a/drivers/usb/dwc3/host.c
 +++ b/drivers/usb/dwc3/host.c
 @@ -61,7 +61,7 @@ static int dwc3_host_get_irq(struct dwc3 *dwc)
  
  int dwc3_host_init(struct dwc3 *dwc)
  {
--	struct property_entry	props[4];
-+	struct property_entry	props[5];
+-	struct property_entry	props[5];
++	struct property_entry	props[6];
  	struct platform_device	*xhci;
  	int			ret, irq;
  	int			prop_idx = 0;
-@@ -95,6 +95,9 @@ int dwc3_host_init(struct dwc3 *dwc)
+@@ -97,6 +97,9 @@ int dwc3_host_init(struct dwc3 *dwc)
  	if (dwc->usb2_lpm_disable)
  		props[prop_idx++] = PROPERTY_ENTRY_BOOL("usb2-lpm-disable");
  
@@ -64,5 +64,5 @@ index 61f57fe5bb78..29f170927e70 100644
  	 * WORKAROUND: dwc3 revisions <=3.00a have a limitation
  	 * where Port Disable command doesn't work.
 -- 
-2.41.0
+2.43.2
 

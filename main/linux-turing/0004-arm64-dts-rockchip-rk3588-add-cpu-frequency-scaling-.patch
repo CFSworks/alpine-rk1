@@ -1,7 +1,7 @@
-From 94904a7c2fcc23edf949280bed4d2e56a4cfcf98 Mon Sep 17 00:00:00 2001
+From f5ee5ea0e485c7ca75348e641e8e69a4b5c02ddc Mon Sep 17 00:00:00 2001
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
 Date: Tue, 4 Apr 2023 17:30:46 +0200
-Subject: [PATCH 07/10] arm64: dts: rockchip: rk3588: add cpu frequency scaling
+Subject: [PATCH 4/7] arm64: dts: rockchip: rk3588: add cpu frequency scaling
  support
 
 Add required bits for CPU frequency scaling to the Rockchip 3588
@@ -16,7 +16,7 @@ Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
  1 file changed, 452 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/rockchip/rk3588s.dtsi b/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
-index 5544f66c6ff4..3ab43dcc7a3f 100644
+index 36b1b7acfe6a..c005aab6399f 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
 +++ b/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
 @@ -10,6 +10,7 @@
@@ -27,9 +27,9 @@ index 5544f66c6ff4..3ab43dcc7a3f 100644
  
  / {
  	compatible = "rockchip,rk3588";
-@@ -18,6 +19,215 @@ / {
- 	#address-cells = <2>;
- 	#size-cells = <2>;
+@@ -50,6 +51,215 @@ aliases {
+ 		spi4 = &spi4;
+ 	};
  
 +	cluster0_opp_table: opp-table-cluster0 {
 +		compatible = "operating-points-v2";
@@ -243,7 +243,7 @@ index 5544f66c6ff4..3ab43dcc7a3f 100644
  	cpus {
  		#address-cells = <1>;
  		#size-cells = <0>;
-@@ -64,6 +274,7 @@ cpu_l0: cpu@0 {
+@@ -96,6 +306,7 @@ cpu_l0: cpu@0 {
  			clocks = <&scmi_clk SCMI_CLK_CPUL>;
  			assigned-clocks = <&scmi_clk SCMI_CLK_CPUL>;
  			assigned-clock-rates = <816000000>;
@@ -251,7 +251,7 @@ index 5544f66c6ff4..3ab43dcc7a3f 100644
  			cpu-idle-states = <&CPU_SLEEP>;
  			i-cache-size = <32768>;
  			i-cache-line-size = <64>;
-@@ -83,6 +294,7 @@ cpu_l1: cpu@100 {
+@@ -115,6 +326,7 @@ cpu_l1: cpu@100 {
  			enable-method = "psci";
  			capacity-dmips-mhz = <530>;
  			clocks = <&scmi_clk SCMI_CLK_CPUL>;
@@ -259,7 +259,7 @@ index 5544f66c6ff4..3ab43dcc7a3f 100644
  			cpu-idle-states = <&CPU_SLEEP>;
  			i-cache-size = <32768>;
  			i-cache-line-size = <64>;
-@@ -102,6 +314,7 @@ cpu_l2: cpu@200 {
+@@ -134,6 +346,7 @@ cpu_l2: cpu@200 {
  			enable-method = "psci";
  			capacity-dmips-mhz = <530>;
  			clocks = <&scmi_clk SCMI_CLK_CPUL>;
@@ -267,7 +267,7 @@ index 5544f66c6ff4..3ab43dcc7a3f 100644
  			cpu-idle-states = <&CPU_SLEEP>;
  			i-cache-size = <32768>;
  			i-cache-line-size = <64>;
-@@ -121,6 +334,7 @@ cpu_l3: cpu@300 {
+@@ -153,6 +366,7 @@ cpu_l3: cpu@300 {
  			enable-method = "psci";
  			capacity-dmips-mhz = <530>;
  			clocks = <&scmi_clk SCMI_CLK_CPUL>;
@@ -275,7 +275,7 @@ index 5544f66c6ff4..3ab43dcc7a3f 100644
  			cpu-idle-states = <&CPU_SLEEP>;
  			i-cache-size = <32768>;
  			i-cache-line-size = <64>;
-@@ -142,6 +356,7 @@ cpu_b0: cpu@400 {
+@@ -174,6 +388,7 @@ cpu_b0: cpu@400 {
  			clocks = <&scmi_clk SCMI_CLK_CPUB01>;
  			assigned-clocks = <&scmi_clk SCMI_CLK_CPUB01>;
  			assigned-clock-rates = <816000000>;
@@ -283,7 +283,7 @@ index 5544f66c6ff4..3ab43dcc7a3f 100644
  			cpu-idle-states = <&CPU_SLEEP>;
  			i-cache-size = <65536>;
  			i-cache-line-size = <64>;
-@@ -161,6 +376,7 @@ cpu_b1: cpu@500 {
+@@ -193,6 +408,7 @@ cpu_b1: cpu@500 {
  			enable-method = "psci";
  			capacity-dmips-mhz = <1024>;
  			clocks = <&scmi_clk SCMI_CLK_CPUB01>;
@@ -291,7 +291,7 @@ index 5544f66c6ff4..3ab43dcc7a3f 100644
  			cpu-idle-states = <&CPU_SLEEP>;
  			i-cache-size = <65536>;
  			i-cache-line-size = <64>;
-@@ -182,6 +398,7 @@ cpu_b2: cpu@600 {
+@@ -214,6 +430,7 @@ cpu_b2: cpu@600 {
  			clocks = <&scmi_clk SCMI_CLK_CPUB23>;
  			assigned-clocks = <&scmi_clk SCMI_CLK_CPUB23>;
  			assigned-clock-rates = <816000000>;
@@ -299,7 +299,7 @@ index 5544f66c6ff4..3ab43dcc7a3f 100644
  			cpu-idle-states = <&CPU_SLEEP>;
  			i-cache-size = <65536>;
  			i-cache-line-size = <64>;
-@@ -201,6 +418,7 @@ cpu_b3: cpu@700 {
+@@ -233,6 +450,7 @@ cpu_b3: cpu@700 {
  			enable-method = "psci";
  			capacity-dmips-mhz = <1024>;
  			clocks = <&scmi_clk SCMI_CLK_CPUB23>;
@@ -307,8 +307,8 @@ index 5544f66c6ff4..3ab43dcc7a3f 100644
  			cpu-idle-states = <&CPU_SLEEP>;
  			i-cache-size = <65536>;
  			i-cache-line-size = <64>;
-@@ -362,6 +580,230 @@ spll: clock-0 {
- 		#clock-cells = <0>;
+@@ -399,6 +617,230 @@ display_subsystem: display-subsystem {
+ 		ports = <&vop_out>;
  	};
  
 +	thermal_zones: thermal-zones {
@@ -538,7 +538,7 @@ index 5544f66c6ff4..3ab43dcc7a3f 100644
  	timer {
  		compatible = "arm,armv8-timer";
  		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_HIGH 0>,
-@@ -448,6 +890,16 @@ sys_grf: syscon@fd58c000 {
+@@ -511,6 +953,16 @@ sys_grf: syscon@fd58c000 {
  		reg = <0x0 0xfd58c000 0x0 0x1000>;
  	};
  
@@ -552,9 +552,9 @@ index 5544f66c6ff4..3ab43dcc7a3f 100644
 +		reg = <0x0 0xfd592000 0x0 0x100>;
 +	};
 +
- 	php_grf: syscon@fd5b0000 {
- 		compatible = "rockchip,rk3588-php-grf", "syscon";
- 		reg = <0x0 0xfd5b0000 0x0 0x1000>;
+ 	vop_grf: syscon@fd5a4000 {
+ 		compatible = "rockchip,rk3588-vop-grf", "syscon";
+ 		reg = <0x0 0xfd5a4000 0x0 0x2000>;
 -- 
-2.41.0
+2.43.2
 
