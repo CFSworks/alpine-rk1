@@ -205,7 +205,7 @@ fdt_path=/boot/dtbs-turing/rockchip/rk3588-turing-rk1.dtb
 
 root_device=/dev/mmcblk0p2
 
-env set bootargs initrd=${ramdisk_path} rootfstype=ext4 root=${root_device} clk_ignore_unused
+env set bootargs initrd=${ramdisk_path} rootfstype=ext4 root=${root_device}
 load ${devtype} ${devnum}:${distro_bootpart} ${kernel_addr_r} ${kernel_path}
 load ${devtype} ${devnum}:${distro_bootpart} ${fdt_addr_r} ${fdt_path}
 bootefi ${kernel_addr_r} ${fdt_addr_r}
